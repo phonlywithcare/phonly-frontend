@@ -12,7 +12,7 @@
       --green-500:#3bb54a;
       --green-200:#e6f6e8;
       --dark:#072018;
-      --muted:#4b5b54;
+      --muted:#4b5b54
       --glass: rgba(255,255,255,0.06);
       --radius:16px;
       --shadow: 0 6px 20px rgba(5,45,30,0.25);
@@ -162,8 +162,20 @@
       grid-template-columns: repeat(3,1fr);
     }
     .service{
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      background:linear-gradient(180deg, rgba(235, 237, 236, 0.02), rgba(255,255,255,0.01));
+      background-color:var(--green-500);
       padding:18px;border-radius:14px;border:1px solid rgba(10,40,20,0.04)
+    }
+    .service h4{
+      margin:0;
+      color:#eaffef;
+      font-size:15px;
+      
+    }
+    .service p{
+      margin-top: 10px;
+      color: #eaffef;
+      font-size: 12px;
     }
     .offers{
       display:flex;
@@ -212,6 +224,65 @@
     /* subtle helper */
     .muted{color:var(--muted);font-size:13px}
     .small{font-size:13px;color:#264d35}
+
+    /* Products Section */
+.products-scroll{
+  display:flex;
+  gap:16px;
+  overflow-x:auto;
+  padding:10px 2px 16px 2px;
+  scroll-behavior:smooth;
+}
+
+.products-scroll::-webkit-scrollbar{
+  height:6px;
+}
+.products-scroll::-webkit-scrollbar-thumb{
+  background:var(--green-500);
+  border-radius:20px;
+}
+
+.product-card{
+  min-width:160px;
+  background:#ffffff0a;
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;
+  padding:12px;
+  text-align:center;
+  box-shadow:0 8px 25px rgba(8,25,14,0.25);
+  backdrop-filter:blur(6px);
+}
+.product-card img{
+  width:100%;
+  max-width:120px;
+  border-radius:12px;
+  margin-bottom:8px;
+}
+.product-card h4{
+  margin:0;
+  color:#eaffef;
+  font-size:15px;
+}
+.imp{
+  margin:0;
+  color:#eaffef;
+  font-size:12px;
+}
+.product-card .price{
+  margin-top:4px;
+  color:var(--accent);
+  font-weight:700;
+}
+
+/* Responsive tweak */
+@media (max-width:620px){
+  .product-card{
+    min-width:140px;
+  }
+}
+
+
+
   </style>
 </head>
 <body>
@@ -235,6 +306,10 @@
         <div class="left">
           <h2 id="hero-heading">Fast phone repair at your doorstep</h2>
           <p>We fix screens, batteries, cameras, water damage and more — professionally and quickly at your home.</p>
+          <p>“Fix your phone — without leaving home.”<br>
+              “Phonly: Quality Android repair at your doorstep.”<br>
+              “Your phone fixed, your day uninterrupted.”</p>
+              
           <div class="pill-features">
             <span class="pill">✅ Same-day visits</span>
             <span class="pill">🔧 Certified technicians</span>
@@ -259,19 +334,21 @@
               </div>
               <div class="field">
                 <label for="phone">Phone number</label>
-                <input id="phone" type="tel" inputmode="tel" required placeholder="+91 98765 43210"/>
+                <input id="phone" type="tel" inputmode="tel" required placeholder="+91 1234567890"/>
               </div>
             </div>
 
             <div class="form-row">
               <div class="field">
-                <label for="device">Device</label>
+                <label for="device">Brand</label>
                 <select id="device" required>
                   <option value="">Select device</option>
                   <option>iPhone</option>
                   <option>Samsung</option>
                   <option>OnePlus / Oppo / Vivo</option>
-                  <option>Other smartphone</option>
+                  <option>Xiaomi</option>
+                  <option>Redmi</option>
+                  <option>Other</option>
                 </select>
               </div>
               <div class="field">
@@ -308,6 +385,47 @@
           </form>
         </aside>
       </section>
+
+      <section id="products" aria-labelledby="productsHeading">
+  <h2 id="productsHeading" style="color:#e8fff0;margin:14px 0">Our Products</h2>
+
+  <div class="products-scroll">
+    <div class="product-card">
+      <img src="/img/folder.webp" alt="Screen replacement">
+      <h4>Screen replacement</h4>
+      <p class="price">₹999/-(copy)</p>
+      <p class="imp"> original parts depends on model</p>
+    </div>
+
+    <div class="product-card">
+      <img src="/img/bn37.jpg" alt="Battery">
+      <h4>Battery</h4>
+      <p class="price">₹999/-</p>
+      <p class="imp"> With 6 months warranty</p>
+    </div>
+
+    <div class="product-card">
+      <img src="/img/cc.webp" alt="charging sub-board">
+      <h4>Charging sub-board (copy)</h4>
+      <p class="price">₹199/-</p>
+      <p class="imp"> original depends on model</p>
+    </div>
+
+    <div class="product-card">
+      <img src="/img/frame.webp" alt="Middel/Frame">
+      <h4>Middel/Frame</h4>
+      <p class="price">₹299/-</p>
+    </div>
+
+    <div class="product-card">
+      <img src="/img/pannel.webp" alt="Back-pannel/glass">
+      <h4>Back-pannel/glass</h4>
+      <p class="imp">Depends on model</p>
+      
+    </div>
+  </div>
+</section>
+
 
       <section aria-labelledby="servicesHeading">
         <h2 id="servicesHeading" style="color:#e8fff0;margin:0 0 10px 0">How it works</h2>
@@ -494,11 +612,8 @@
 
     // Accessibility: focus anchor
     document.querySelectorAll('a').forEach(a=>{a.addEventListener('keyup', e=>{ if(e.key==='Enter') a.click() })});
-
     const API_URL = "https://phonly-backend.onrender.com";
     
   </script>
 </body>
 </html>
-
-
