@@ -522,60 +522,98 @@
     <a href="tel:+917701873075">Call</a>
   </div>
 
-<script>
-const API_URL = "https://phonly-backend.onrender.com";
+  <script>
+    // Simple client-side booking & review storage (no backend).
+    // In production, replace with API calls to your server.
+    const API_URL = "https://phonly-backend.onrender.com";
 
+    function $(s){return document.querySelector(s)}
+    function createEl(tag,attrs={},text=''){const e=document.createElement(tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text)e.textContent=text;return e}
 
-function $(s){return document.querySelector(s)}
-function createEl(tag,attrs={},text=''){const e=document.createElement(tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text)e.textContent=text;return e}
+    // --- Bookings ---
+    const bookingForm = $('#bookingForm');
+    const bookingMsg = $('#bookingMsg');
 
+    bookingForm.addEventListener('submit', (ev)=>{
+      ev.preventDefault();
+      const name = $('#name').value.trim();
+      const phone = $('#phone').value.trim();
+      const device = $('#device').value;
+      const service = $('#service').value;
+      const address = $('#address').value.trim();
+      const datetime = $('#datetime').value;
 
-/* ---------------------------------- */
-/* BOOKING FORM → BACKEND POST */
-/* ---------------------------------- */
-const bookingForm = $('#bookingForm');
-const bookingMsg = $('#bookingMsg');
+      if(!name || !phone || !device || !service || !address){
+        bookingMsg.textContent = 'Please fill required fields.';
+        bookingMsg.style.color = '#8b231a';
+        return;
+      }
 
+      const booking = {id:Date.now(), name, phone, device, service, address, datetime};
+      // store to localStorage demo (replace with POST to server)
+      const bookings = JSON.parse(localStorage.getItem('phonly_bookings')||'[]');
+      bookings.unshift(booking);
+      localStorage.setItem('phonly_bookings', JSON.stringify(bookings));
 
-bookingForm.addEventListener('submit', (ev)=>{
-ev.preventDefault();
+      bookingMsg.style.color = '#1a6b2a';
+      bookingMsg.textContent = 'Thanks! Your booking is received. We will call to confirm.';
 
+      bookingForm.reset();
+      // optional: scroll to reviews or confirmation
+    });
 
-const name = $('#name').value.trim();
-const phone = $('#phone').value.trim();
-const device = $('#device').value;
-const service = $('#service').value;
-const address = $('#address').value.trim();
-const datetime = $('#datetime').value;
+    // --- Reviews ---
+    const defaultReviews = [
+      {id:1,name:'Amit K',rating:5,text:'Quick service & genuine parts. Technician was polite.'},
+      {id:2,name:'Priya S',rating:5,text:'Fixed my screen same day. Great job.'}
+    ];
+    function loadReviews(){
+      const stored = JSON.parse(localStorage.getItem('phonly_reviews')||'null');
+      const reviews = stored || defaultReviews;
+      const list = $('#reviewsList');
+      list.innerHTML = '';
+      reviews.forEach(r=>{
+        const div = createEl('div',{class:'review'});
+        const head = createEl('div',{},`${r.name} — ${'★'.repeat(r.rating)}${r.rating<5? '':''}`);
+        head.style.fontWeight='700';
+        const p = createEl('div',{class:'small muted'}, r.text);
+        div.appendChild(head);
+        div.appendChild(p);
+        list.appendChild(div);
+      });
+    }
+    loadReviews();
 
+    const reviewForm = $('#reviewForm');
+    const reviewMsg = $('#reviewMsg');
 
-if(!name || !phone || !device || !service || !address){
-bookingMsg.textContent = 'Please fill required fields.';
-bookingMsg.style.color = 'red';
-return;
-}
+    reviewForm.addEventListener('submit', (ev)=>{
+      ev.preventDefault();
+      const name = $('#rname').value.trim();
+      const rating = parseInt($('#rrating').value||0,10);
+      const text = $('#rtext').value.trim();
 
+      if(!name || !rating){
+        reviewMsg.style.color='#8b231a';
+        reviewMsg.textContent = 'Please add name and rating.';
+        return;
+      }
+      const reviews = JSON.parse(localStorage.getItem('phonly_reviews')||'[]');
+      reviews.unshift({id:Date.now(), name, rating, text});
+      localStorage.setItem('phonly_reviews', JSON.stringify(reviews));
+      reviewMsg.style.color='#1a6b2a';
+      reviewMsg.textContent = 'Thanks — your review was added.';
+      reviewForm.reset();
+      loadReviews();
+    });
 
-fetch(`${API_URL}/api/book`, {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({ name, phone, device, service, address, datetime })
-})
-.then(res => res.json())
-.then(() => {
-bookingMsg.style.color = 'green';
-bookingMsg.textContent = 'Booking submitted successfully!';
-bookingForm.reset();
-})
-.catch(() => {
-bookingMsg.style.color = 'red';
-bookingMsg.textContent = 'Server error. Try again later.';
-});
-});
-</script>
+    // Helpful: if logo missing, show initials
+    const logo = document.getElementById('logoImg');
+    logo.addEventListener('error', ()=>{/* handled by onerror in markup */});
+
+    // Accessibility: focus anchor
+    document.querySelectorAll('a').forEach(a=>{a.addEventListener('keyup', e=>{ if(e.key==='Enter') a.click() })});
+    
+  </script>
 </body>
 </html>
-
-
-
-
