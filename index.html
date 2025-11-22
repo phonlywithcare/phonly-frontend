@@ -191,9 +191,7 @@
     .review{
       padding:12px;border-radius:10px;background:#ffffff;border:1px solid rgba(20,70,30,0.04)
     }
-
-
-
+  
     footer{
       margin-top:30px;padding:18px;border-radius:12px;background:linear-gradient(0deg,#041b11,#062114);color:#9fe6b6;display:flex;justify-content:space-between;align-items:center;
     }
@@ -639,29 +637,12 @@ async function loadReviews() {
       reviewsContainer.innerHTML = "<p>No reviews found.</p>";
       return;
     }
-
-    reviewsContainer.innerHTML = reviews
-      .map(
-        (r) => `
-        <div class="review">
-          <h4>${r.name}</h4>
-          <div class="rating">⭐ ${r.rating}/5</div>
-          <p>${r.message || ""}</p>
-        </div>
-      `
-      )
-      .join("");
-  } catch (err) {
-    reviewsContainer.innerHTML = "<p>Error loading reviews.</p>";
-  }
-}
-
-loadReviews();
   
 </script>
 
 </body>
 </html>
+
 
 
 
