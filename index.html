@@ -522,85 +522,140 @@
     <a href="tel:+917701873075">Call</a>
   </div>
 <script>
-  const backend = "https://backendwithapi.onrender.com";
+const backend = "https://backendwithapi.onrender.com";
 
-  // Quick selector
-  function $(id){ return document.getElementById(id); }
+// Short helper
+const $ = (id) => document.getElementById(id);
 
-  // ================================
-  // SUBMIT BOOKING TO BACKEND
-  // ================================
-  $("bookingForm").addEventListener("submit", async (e)=>{
-    e.preventDefault();
+// --------------------------------------------
+// BOOKING FORM
+// --------------------------------------------
+const bookingForm = $("bookingForm");
+const bookingMsg = $("bookingMsg");
 
-    const data = {
-      name: $("name").value.trim(),
-      phone: $("phone").value.trim(),
-      device: $("device").value.trim(),
-      service: $("service").value.trim(),
-      address: $("address").value.trim(),
-      datetime: $("datetime").value
-    };
+bookingForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    $("bookingMsg").style.color = "#1a7b4f";
-    $("bookingMsg").textContent = "Submitting...";
+  const name = $("name").value.trim();
+  const phone = $("phone").value.trim();
+  const device = $("device").value;
+  const service = $("service").value;
+  const address = $("address").value.trim();
+  const datetime = $("datetime").value;
 
-    try {
-      const res = await fetch(`${backend}/api/bookings`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      const result = await res.json();
-
-      if(res.ok){
-        $("bookingMsg").textContent = "Booking received! Our technician will contact you shortly.";
-        $("bookingForm").reset();
-      } else {
-        $("bookingMsg").style.color = "#aa1e1e";
-        $("bookingMsg").textContent = result.message || "Server error";
-      }
-
-    } catch (err) {
-      $("bookingMsg").style.color = "#aa1e1e";
-      $("bookingMsg").textContent = "Network error. Try again.";
-    }
-  });
-
-  // ================================
-  // LOAD REVIEWS FROM BACKEND
-  // ================================
-  async function loadReviews(){
-    try{
-      const res = await fetch(`${backend}/api/reviews`);
-      const reviews = await res.json();
-
-      const container = $("reviewsList");
-      container.innerHTML = "";
-
-      if(reviews.length === 0){
-        container.textContent = "No reviews yet.";
-        return;
-      }
-
-      reviews.forEach(r=>{
-        const div = document.createElement("div");
-        div.className = "review-box";
-        div.innerHTML = `
-          <strong>${r.name}</strong><br>
-          ⭐ ${r.rating}/5<br>
-          <p>${r.message}</p>
-        `;
-        container.appendChild(div);
-      });
-
-    } catch (err){
-      $("reviewsList").textContent = "Unable to load reviews.";
-    }
+  if (!name || !phone || !device || !service || !address) {
+    bookingMsg.textContent = "Please fill required fields.";
+    bookingMsg.style.color = "#cc2020";
+    return;
   }
 
-  loadReviews();
+  bookingMsg.textContent = "Submitting...";
+  bookingMsg.style.color = "#1a7b4f";
+
+  try {
+    const res = await fetch(`${backend}/api/bookings`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, phone, device, service, address, datetime }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      bookingMsg.textContent = "Booking sent successfully!";
+      bookingMsg.style.color = "#1a7b4f";
+      bookingForm.reset();
+    } else {
+      bookingMsg.textContent = data.message || "Server error";
+      bookingMsg.style.color = "#cc2020";
+    }
+  } catch (err) {
+    bookingMsg.textContent = "Network error";
+    bookingMsg.style.color = "#cc2020";
+  }
+});
+
+// --------------------------------------------
+// REVIEWS — SUBMIT
+// --------------------------------------------
+const reviewForm = $("reviewForm");
+const reviewMsg = $("reviewMsg");
+
+reviewForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = $("rname").value.trim();
+  const rating = Number($("rrating").value);
+  const message = $("rtext").value.trim();
+
+  if (!name || !rating) {
+    reviewMsg.textContent = "Please enter your name & rating.";
+    reviewMsg.style.color = "#cc2020";
+    return;
+  }
+
+  reviewMsg.textContent = "Submitting...";
+  reviewMsg.style.color = "#1a7b4f";
+
+  try {
+    const res = await fetch(`${backend}/api/reviews`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, rating, message }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      reviewMsg.textContent = "Review submitted!";
+      reviewMsg.style.color = "#1a7b4f";
+      reviewForm.reset();
+      loadReviews();
+    } else {
+      reviewMsg.textContent = data.message || "Server error";
+      reviewMsg.style.color = "#cc2020";
+    }
+  } catch (err) {
+    reviewMsg.textContent = "Network error";
+    reviewMsg.style.color = "#cc2020";
+  }
+});
+
+// --------------------------------------------
+// REVIEWS — LOAD
+// --------------------------------------------
+const reviewsContainer = $("reviewsContainer");
+
+async function loadReviews() {
+  reviewsContainer.innerHTML = "<p>Loading reviews...</p>";
+
+  try {
+    const res = await fetch(`${backend}/api/reviews`);
+    const reviews = await res.json();
+
+    if (!Array.isArray(reviews)) {
+      reviewsContainer.innerHTML = "<p>No reviews found.</p>";
+      return;
+    }
+
+    reviewsContainer.innerHTML = reviews
+      .map(
+        (r) => `
+        <div class="reviewBox">
+          <h4>${r.name}</h4>
+          <div class="rating">⭐ ${r.rating}/5</div>
+          <p>${r.message || ""}</p>
+        </div>
+      `
+      )
+      .join("");
+  } catch (err) {
+    reviewsContainer.innerHTML = "<p>Error loading reviews.</p>";
+  }
+}
+
+loadReviews();
 </script>
+
 </body>
 </html>
