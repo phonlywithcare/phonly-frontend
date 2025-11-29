@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Phonly Admin Dashboard</title>
+<link rel="shortcut icon" href="/logo.png.png" type="image/x-icon">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
   <!-- Login Screen -->
@@ -20,13 +20,8 @@
 
   <!-- Dashboard Screen -->
   <div id="dashboardScreen" class="hidden p-4">
-    <div class="flex justify-between items-center mb-4"></div>
-    <h2 class="text-2xl font-bold text-green-700">Bookings</h2>
+    <h2 class="text-2xl font-bold mb-4 text-green-700">Bookings</h2>
 
-     <span id="notifyDot" class="hidden bg-red-500 text-white text-sm px-3 py-1 rounded-xl">
-      New Booking!
-    </span>
-  </div>
     <div id="bookingsList" class="grid gap-4"></div>
   </div>
 
@@ -127,25 +122,6 @@ async function sendWhatsapp() {
 
   alert("WhatsApp notification sent!");
 }
-// CONNECT TO SOCKET.IO SERVER
-const socket = io("https://backendwithapi.onrender.com");
-
-// WHEN NEW BOOKING ARRIVES
-socket.on("new-booking", (booking) => {
-  // Show red badge
-  document.getElementById("notifyDot").classList.remove("hidden");
-
-  // Popup alert
-  alert("🔔 New Booking Received!\nName: " + booking.name);
-
-  // Play sound
-  const audio = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-bell-notification-933.mp3");
-  audio.play();
-
-  // Reload bookings
-  loadBookings();
-});
-
 </script>
 </body>
 </html>
