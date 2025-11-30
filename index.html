@@ -12,7 +12,7 @@
       --green-500:#3bb54a;
       --green-200:#e6f6e8;
       --dark:#072018;
-      --muted:#4b5b54
+      --muted:#4b5b54;
       --glass: rgba(255,255,255,0.06);
       --radius:16px;
       --shadow: 0 6px 20px rgba(5,45,30,0.25);
@@ -74,6 +74,7 @@
       text-decoration:none;
       font-weight:700;
       box-shadow:var(--shadow);
+      margin-left:8px;
     }
 
     /* Hero */
@@ -146,12 +147,21 @@
       cursor:pointer;
       font-weight:700;
       box-shadow: 0 10px 30px rgba(10,50,20,0.28);
+      text-decoration:none;
     }
     .btn.secondary{
-      background:transparent;
-      color:var(--green-500);
-      border:1px solid rgba(50,160,80,0.12);
-      font-weight:600;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      background:var(--green-700);
+      color:#eaffef;
+      padding:10px 14px;
+      border-radius:12px;
+      border:none;
+      cursor:pointer;
+      font-weight:700;
+      box-shadow: 0 10px 30px rgba(10,50,20,0.28);
+      text-decoration:none;
     }
 
     /* sections */
@@ -282,16 +292,12 @@
     min-width:140px;
   }
 }
-
-
-
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <a class="brand" href="#">
-        <!-- Replace logo.png with your uploaded file -->
         <img src="/logo.png.png" alt="Phonly logo" id="logoImg" onerror="this.style.display='none'"/>
         <div>
           <h1>Phonly</h1>
@@ -300,6 +306,7 @@
       </a>
       <nav>
         <a class="cta" href="#booking">Book Repair</a>
+        <a class="cta" href="/status.html">Check Status</a>  
       </nav>
     </header>
 
@@ -319,7 +326,7 @@
           </div>
           <div style="margin-top:16px;">
             <a class="btn" href="#booking">Book a repair</a>
-            <a class="btn secondary" href="#offers">View offers</a>
+            <a class="btn secondary" href="/status.html" style="margin-left:8px">Check status</a>
           </div>
           <p class="small" style="margin-top:10px">Serving nearby areas — we come to your home with original-quality parts & a 30-day warranty.</p>
         </div>
@@ -388,45 +395,56 @@
         </aside>
       </section>
 
+      <!-- Status section placed after hero/booking
+      <section id="status" aria-labelledby="statusHeading">
+        <h2 id="statusHeading" style="color:#e8fff0;margin:14px 0">Check Booking Status</h2>
+        <div class="card" style="display:flex;flex-direction:column;gap:12px;max-width:720px">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input id="statusId" type="text" placeholder="Enter Booking ID (e.g. PHN-AB12CD)" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(8,40,22,0.08)"/>
+            <button class="btn" onclick="checkStatus()">Check Status</button>
+          </div>
+          <div id="statusResult" style="margin-top:8px;color:#072018"></div>
+        </div>
+      </section> -->
+
       <section id="products" aria-labelledby="productsHeading">
-  <h2 id="productsHeading" style="color:#e8fff0;margin:14px 0">Our Service</h2>
+        <h2 id="productsHeading" style="color:#e8fff0;margin:14px 0">Our Service</h2>
 
-  <div class="products-scroll">
-    <div class="product-card">
-      <img src="/folder.webp" alt="Screen replacement">
-      <h4>Screen replacement</h4>
-      <p class="price">₹999/-(copy)</p>
-      <p class="imp"> original parts depends on model</p>
-    </div>
+        <div class="products-scroll">
+          <div class="product-card">
+            <img src="/folder.webp" alt="Screen replacement">
+            <h4>Screen replacement</h4>
+            <p class="price">₹999/-(copy)</p>
+            <p class="imp"> original parts depends on model</p>
+          </div>
 
-    <div class="product-card">
-      <img src="/bn37.jpg" alt="Battery">
-      <h4>Battery</h4>
-      <p class="price">₹999/-</p>
-      <p class="imp"> With 6 months warranty</p>
-    </div>
+          <div class="product-card">
+            <img src="/bn37.jpg" alt="Battery">
+            <h4>Battery</h4>
+            <p class="price">₹999/-</p>
+            <p class="imp"> With 6 months warranty</p>
+          </div>
 
-    <div class="product-card">
-      <img src="/cc.webp" alt="charging sub-board">
-      <h4>Charging sub-board (copy)</h4>
-      <p class="price">₹199/-</p>
-      <p class="imp"> original depends on model</p>
-    </div>
+          <div class="product-card">
+            <img src="/cc.webp" alt="charging sub-board">
+            <h4>Charging sub-board (copy)</h4>
+            <p class="price">₹199/-</p>
+            <p class="imp"> original depends on model</p>
+          </div>
 
-    <div class="product-card">
-      <img src="/frame.webp" alt="Middel/Frame">
-      <h4>Middel/Frame</h4>
-      <p class="price">₹299/-</p>
-    </div>
+          <div class="product-card">
+            <img src="/frame.webp" alt="Middel/Frame">
+            <h4>Middel/Frame</h4>
+            <p class="price">₹299/-</p>
+          </div>
 
-    <div class="product-card">
-      <img src="/pannel.webp" alt="Back-pannel/glass">
-      <h4>Back-pannel/glass</h4>
-      <p class="imp">Depends on model</p>
-      
-    </div>
-  </div>
-</section>
+          <div class="product-card">
+            <img src="/pannel.webp" alt="Back-pannel/glass">
+            <h4>Back-pannel/glass</h4>
+            <p class="imp">Depends on model</p>
+          </div>
+        </div>
+      </section>
 
 
       <section aria-labelledby="servicesHeading">
@@ -523,6 +541,7 @@
     <a href="https://wa.me/917701873075?text=Hi%20Phonly%20I%20want%20to%20book%20a%20repair" target="_blank" rel="noopener noreferrer">WhatsApp</a>
     <a href="tel:+917701873075">Call</a>
   </div>
+
 <script>
 const backend = "https://backendwithapi.onrender.com";
 
@@ -563,10 +582,12 @@ bookingForm.addEventListener("submit", async (e) => {
 
     const data = await res.json();
 
-    if (res.ok) {
-      bookingMsg.textContent = "Booking sent successfully!";
+    if (res.ok && data.success) {
+      // Show booking ID prominently
+      bookingMsg.innerHTML = `✅ Booking successful!<br>Your Booking ID: <b>${data.bookingId}</b><br>Please save this ID to check status.`;
       bookingMsg.style.color = "#1a7b4f";
       bookingForm.reset();
+      loadReviews(); // optional: refresh reviews if booking affects UI
     } else {
       bookingMsg.textContent = data.message || "Server error";
       bookingMsg.style.color = "#cc2020";
@@ -576,6 +597,54 @@ bookingForm.addEventListener("submit", async (e) => {
     bookingMsg.style.color = "#cc2020";
   }
 });
+
+// --------------------------------------------
+// STATUS CHECKER
+// --------------------------------------------
+const statusResult = $("statusResult");
+
+async function checkStatus() {
+  const idInput = $("statusId");
+  const id = idInput.value.trim();
+
+  if (!id) {
+    statusResult.textContent = "Please enter a Booking ID.";
+    statusResult.style.color = "#cc2020";
+    return;
+  }
+
+  statusResult.textContent = "Checking...";
+  statusResult.style.color = "#1a7b4f";
+
+  try {
+    const res = await fetch(`${backend}/api/bookings/${encodeURIComponent(id)}`);
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      statusResult.innerHTML = `<span style="color:#cc2020">❌ Booking not found.</span>`;
+      return;
+    }
+
+    const b = data.booking;
+
+    statusResult.innerHTML = `
+      <div style="padding:12px;border-radius:10px;background:#f6fff5;border:1px solid rgba(20,70,30,0.06)">
+        <div><strong>Booking ID:</strong> ${b.bookingId}</div>
+        <div><strong>Status:</strong> ${b.status}</div>
+        <div><strong>Name:</strong> ${b.name}</div>
+        <div><strong>Phone:</strong> ${b.phone}</div>
+        <div><strong>Device:</strong> ${b.device}</div>
+        <div><strong>Service:</strong> ${b.service}</div>
+        <div><strong>Address:</strong> ${b.address}</div>
+        <div><strong>Date:</strong> ${b.datetime || "Not selected"}</div>
+      </div>
+    `;
+  } catch (err) {
+    console.error("Status check error:", err);
+    statusResult.textContent = "Server error";
+    statusResult.style.color = "#cc2020";
+  }
+}
 
 // --------------------------------------------
 // REVIEWS — SUBMIT
@@ -608,7 +677,7 @@ reviewForm.addEventListener("submit", async (e) => {
 
     const data = await res.json();
 
-    if (res.ok) {
+    if (res.ok && data.success) {
       reviewMsg.textContent = "Review submitted!";
       reviewMsg.style.color = "#1a7b4f";
       reviewForm.reset();
@@ -635,7 +704,7 @@ async function loadReviews() {
     const res = await fetch(`${backend}/api/reviews`);
     const reviews = await res.json();
 
-    if (!Array.isArray(reviews)) {
+    if (!Array.isArray(reviews) || reviews.length === 0) {
       reviewsContainer.innerHTML = "<p>No reviews found.</p>";
       return;
     }
@@ -661,10 +730,3 @@ loadReviews();
 
 </body>
 </html>
-
-
-
-
-
-
-

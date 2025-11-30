@@ -3,436 +3,124 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Phonly Admin | Professional Dashboard</title>
-  <link rel="shortcut icon" href="/logo.png.png" type="image/x-icon">
+  <title>Phonly Admin Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    /* Smooth transition for toast notifications */
-    .toast { transition: all 0.5s ease-in-out; opacity: 0; transform: translateY(20px); }
-    .toast.show { opacity: 1; transform: translateY(0); }
-  </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-100 min-h-screen">
+  <!-- Login Screen -->
+  <div id="loginScreen" class="flex items-center justify-center h-screen p-4">
+    <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-sm">
+      <h2 class="text-2xl font-bold text-center mb-4 text-green-600">Phonly Admin Login</h2>
+      <input id="email" class="w-full p-3 mb-3 border rounded-xl" placeholder="Email" />
+      <input id="password" type="password" class="w-full p-3 mb-4 border rounded-xl" placeholder="Password" />
+      <button onclick="login()" class="w-full bg-green-600 text-white p-3 rounded-xl">Login</button>
+    </div>
+  </div>
 
-  <div id="loginScreen" class="flex items-center justify-center h-screen w-full bg-gradient-to-br from-green-50 to-green-100 p-4">
-    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm border border-gray-100">
-      <div class="flex justify-center mb-6">
-        <div class="bg-green-100 p-3 rounded-full">
-            <i class="ph ph-lock-key text-3xl text-green-600"></i>
-        </div>
-      </div>
-      <h2 class="text-2xl font-bold text-center mb-2 text-gray-800">Welcome Back</h2>
-      <p class="text-center text-gray-500 mb-6 text-sm">Enter your credentials to access the panel.</p>
-      
-      <div class="space-y-4">
-        <div>
-            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Email Address</label>
-            <input id="email" type="email" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition" placeholder="admin@phonly.com" />
-        </div>
-        <div>
-            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Password</label>
-            <input id="password" type="password" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition" placeholder="••••••" />
-        </div>
-        <button onclick="login()" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold p-3 rounded-lg transition shadow-md shadow-green-200">Sign In</button>
+  <!-- Dashboard Screen -->
+  <div id="dashboardScreen" class="hidden p-4">
+    <h2 class="text-2xl font-bold mb-4 text-green-700">Bookings</h2>
+
+    <div id="bookingsList" class="grid gap-4"></div>
+  </div>
+
+  <!-- Booking Details Modal -->
+  <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-5 w-full max-w-md">
+      <h3 id="modalName" class="text-xl font-bold mb-2"></h3>
+      <p id="modalPhone" class="mb-1"></p>
+      <p id="modalDevice" class="mb-1"></p>
+      <p id="modalIssue" class="mb-1"></p>
+      <p id="modalStatus" class="font-semibold text-green-700 mb-3"></p>
+
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="updateStatus('accepted')" class="bg-blue-500 text-white p-2 rounded-xl">Accept</button>
+        <button onclick="updateStatus('ontheway')" class="bg-orange-500 text-white p-2 rounded-xl">On the way</button>
+        <button onclick="updateStatus('completed')" class="bg-green-600 text-white p-2 rounded-xl col-span-2">Completed</button>
+        <button onclick="sendWhatsapp()" class="bg-green-700 text-white p-2 rounded-xl col-span-2">Send WhatsApp</button>
+        <button onclick="closeModal()" class="bg-gray-300 p-2 rounded-xl col-span-2">Close</button>
       </div>
     </div>
   </div>
 
-  <div id="dashboardScreen" class="hidden flex h-screen overflow-hidden">
-    
-    <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
-      <div class="p-6 border-b border-gray-100 flex items-center gap-2">
-        <div class="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold">P</div>
-        <span class="text-xl font-bold tracking-tight">Phonly<span class="text-green-600">Admin</span></span>
-      </div>
+<script>
+let selectedBooking = null;
 
-      <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
-        <a href="#" class="flex items-center gap-3 px-4 py-3 bg-green-50 text-green-700 rounded-lg font-medium">
-          <i class="ph ph-squares-four text-xl"></i> Dashboard
-        </a>
-        <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg transition">
-          <i class="ph ph-users text-xl"></i> Customers
-        </a>
-        <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg transition">
-          <i class="ph ph-gear text-xl"></i> Settings
-        </a>
-      </nav>
+// LOGIN SYSTEM
+function login() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
 
-      <div class="p-4 border-t border-gray-100">
-        <button onclick="logout()" class="flex items-center gap-3 px-4 py-2 w-full text-red-600 hover:bg-red-50 rounded-lg transition text-sm font-medium">
-          <i class="ph ph-sign-out text-lg"></i> Logout
-        </button>
-      </div>
-    </aside>
+  if (email === "admin@phonly.com" && password === "123456") {
+    localStorage.setItem("admin", "true");
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('dashboardScreen').classList.remove('hidden');
+    loadBookings();
+  } else {
+    alert("Invalid login");
+  }
+}
 
-    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
-      
-      <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 z-10">
-        <div class="md:hidden font-bold text-lg">Phonly</div> <div class="relative w-full max-w-md hidden md:block">
-          <i class="ph ph-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-lg"></i>
-          <input type="text" id="searchInput" onkeyup="filterBookings()" placeholder="Search by name, phone, or device..." class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white transition text-sm">
-        </div>
+// FETCH BOOKINGS FROM BACKEND
+async function loadBookings() {
+  const res = await fetch("https://backendwithapi.onrender.com/api/bookings");
+  const data = await res.json();
 
-        <div class="flex items-center gap-4">
-          <button onclick="loadBookings()" class="p-2 text-gray-500 hover:text-green-600 transition" title="Refresh Data">
-            <i class="ph ph-arrows-clockwise text-xl"></i>
-          </button>
-          <div class="h-8 w-8 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold text-xs">
-            AD
-          </div>
-        </div>
-      </header>
+  const container = document.getElementById("bookingsList");
+  container.innerHTML = "";
 
-      <div class="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50">
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-500">Total Bookings</p>
-                    <h3 class="text-2xl font-bold text-gray-800 mt-1" id="statTotal">0</h3>
-                </div>
-                <div class="p-3 bg-blue-50 text-blue-600 rounded-lg"><i class="ph ph-clipboard-text text-xl"></i></div>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-500">Pending</p>
-                    <h3 class="text-2xl font-bold text-gray-800 mt-1" id="statPending">0</h3>
-                </div>
-                <div class="p-3 bg-yellow-50 text-yellow-600 rounded-lg"><i class="ph ph-clock text-xl"></i></div>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-500">Completed</p>
-                    <h3 class="text-2xl font-bold text-gray-800 mt-1" id="statCompleted">0</h3>
-                </div>
-                <div class="p-3 bg-green-50 text-green-600 rounded-lg"><i class="ph ph-check-circle text-xl"></i></div>
-            </div>
-        </div>
+  data.forEach(b => {
+    const card = document.createElement("div");
+    card.className = "bg-white p-4 rounded-xl shadow";
+    card.innerHTML = `
+      <h3 class='text-lg font-bold'>${b.name}</h3>
+      <p>${b.phone}</p>
+      <p class='text-sm text-gray-600'>${b.device}</p>
+      <p class='font-semibold text-green-600 mt-2'>${b.status}</p>
+      <button onclick='openModal(${JSON.stringify(b)})' class="mt-3 bg-green-600 text-white p-2 rounded-lg w-full">Manage</button>
+    `;
+    container.appendChild(card);
+  });
+}
 
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-bold text-gray-800">Recent Bookings</h2>
-            <input type="text" id="mobileSearch" onkeyup="filterBookings()" placeholder="Search..." class="md:hidden border rounded px-3 py-1 text-sm">
-        </div>
+// MODAL
+function openModal(b) {
+  selectedBooking = b;
+  document.getElementById("modalName").innerText = b.name;
+  document.getElementById("modalPhone").innerText = "📞 " + b.phone;
+  document.getElementById("modalDevice").innerText = "📱 " + b.device;
+  document.getElementById("modalIssue").innerText = "🔧 " + b.issue;
+  document.getElementById("modalStatus").innerText = "Status: " + b.status;
 
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div id="loadingState" class="hidden p-8 text-center">
-                <i class="ph ph-spinner animate-spin text-3xl text-green-600"></i>
-                <p class="text-gray-500 mt-2 text-sm">Fetching data...</p>
-            </div>
+  document.getElementById("modal").classList.remove("hidden");
+}
+function closeModal() {
+  document.getElementById("modal").classList.add("hidden");
+}
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-gray-50 border-b border-gray-100 text-xs uppercase text-gray-500 font-semibold">
-                        <tr>
-                            <th class="px-6 py-4">Customer</th>
-                            <th class="px-6 py-4">Device Info</th>
-                            <th class="px-6 py-4">Status</th>
-                            <th class="px-6 py-4 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bookingsList" class="divide-y divide-gray-100 text-sm">
-                        </tbody>
-                </table>
-                <div id="emptyState" class="hidden p-8 text-center text-gray-500">
-                    <p>No bookings found.</p>
-                </div>
-            </div>
-        </div>
-      </div>
-    </main>
-  </div>
+// UPDATE STATUS API
+async function updateStatus(status) {
+  await fetch(`https://backendwithapi.onrender.com/api/bookings/${selectedBooking._id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status })
+  });
 
-  <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-gray-900 bg-opacity-40 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
-    
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg relative z-10 overflow-hidden transform transition-all scale-100">
-      
-      <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-        <h3 class="text-lg font-bold text-gray-800">Booking Details</h3>
-        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition"><i class="ph ph-x text-xl"></i></button>
-      </div>
+  alert("Status updated");
+  closeModal();
+  loadBookings();
+}
 
-      <div class="p-6">
-        <div class="flex items-center gap-4 mb-6">
-            <div class="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-xl" id="modalInitials">
-                ?
-            </div>
-            <div>
-                <h2 id="modalName" class="text-xl font-bold text-gray-900"></h2>
-                <p id="modalPhone" class="text-gray-500 text-sm"></p>
-            </div>
-        </div>
+// SEND WHATSAPP MESSAGEs
+async function sendWhatsapp() {
+    await fetch(`https://backendwithapi.onrender.com/api/whatsapp/send`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ phone: selectedBooking.phone, name: selectedBooking.name, status: selectedBooking.status })
+  });
 
-        <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
-                <p class="text-xs text-gray-400 uppercase font-bold">Device</p>
-                <p id="modalDevice" class="font-medium text-gray-800"></p>
-            </div>
-            <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
-                <p class="text-xs text-gray-400 uppercase font-bold">Current Status</p>
-                <p id="modalStatus" class="font-medium text-gray-800"></p>
-            </div>
-        </div>
-        
-        <div class="mb-6">
-            <p class="text-xs text-gray-400 uppercase font-bold mb-1">Issue Description</p>
-            <p id="modalIssue" class="text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-100"></p>
-        </div>
-
-        <p class="text-xs text-gray-400 uppercase font-bold mb-2">Update Status</p>
-        <div class="grid grid-cols-3 gap-2 mb-4">
-            <button onclick="updateStatus('accepted')" class="flex flex-col items-center justify-center p-3 rounded-lg border border-blue-100 bg-blue-50 text-blue-700 hover:bg-blue-100 transition">
-                <i class="ph ph-thumbs-up text-lg mb-1"></i>
-                <span class="text-xs font-semibold">Accept</span>
-            </button>
-            <button onclick="updateStatus('ontheway')" class="flex flex-col items-center justify-center p-3 rounded-lg border border-orange-100 bg-orange-50 text-orange-700 hover:bg-orange-100 transition">
-                <i class="ph ph-moped text-lg mb-1"></i>
-                <span class="text-xs font-semibold">On Way</span>
-            </button>
-            <button onclick="updateStatus('completed')" class="flex flex-col items-center justify-center p-3 rounded-lg border border-green-100 bg-green-50 text-green-700 hover:bg-green-100 transition">
-                <i class="ph ph-check-circle text-lg mb-1"></i>
-                <span class="text-xs font-semibold">Complete</span>
-            </button>
-        </div>
-
-        <button onclick="sendWhatsapp()" id="waButton" class="w-full flex items-center justify-center gap-2 bg-green-600 text-white p-3 rounded-xl hover:bg-green-700 transition shadow-lg shadow-green-200">
-            <i class="ph ph-whatsapp-logo text-xl"></i> Send WhatsApp Update
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
-
-  <script>
-    let selectedBooking = null;
-    let allBookings = []; // Store locally for search filtering
-
-    // --- UTILITIES ---
-    
-    // Professional Toast Notification
-    function showToast(message, type = 'success') {
-        const container = document.getElementById('toastContainer');
-        const toast = document.createElement('div');
-        const colorClass = type === 'success' ? 'bg-gray-800 text-white' : 'bg-red-500 text-white';
-        const icon = type === 'success' ? '<i class="ph ph-check-circle text-green-400"></i>' : '<i class="ph ph-warning-circle"></i>';
-        
-        toast.className = `toast flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-sm font-medium ${colorClass}`;
-        toast.innerHTML = `${icon} <span>${message}</span>`;
-        
-        container.appendChild(toast);
-        
-        // Trigger animation
-        setTimeout(() => toast.classList.add('show'), 10);
-
-        // Remove after 3 seconds
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 500);
-        }, 3000);
-    }
-
-    // Status Badge Helper
-    function getStatusBadge(status) {
-        status = status.toLowerCase();
-        if (status === 'completed') return '<span class="px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold border border-green-200">Completed</span>';
-        if (status === 'accepted') return '<span class="px-2 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold border border-blue-200">Accepted</span>';
-        if (status === 'ontheway') return '<span class="px-2 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-bold border border-orange-200">On The Way</span>';
-        return '<span class="px-2 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-bold border border-gray-200">Pending</span>';
-    }
-
-    // --- AUTHENTICATION ---
-
-    // Check session on load
-    if(localStorage.getItem("admin") === "true") {
-        document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('dashboardScreen').classList.remove('hidden');
-        loadBookings();
-    }
-
-    function login() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      if (email === "admin@phonly.com" && password === "123456") {
-        localStorage.setItem("admin", "true");
-        document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('dashboardScreen').classList.remove('hidden');
-        showToast("Welcome back, Admin!");
-        loadBookings();
-      } else {
-        showToast("Invalid Credentials", "error");
-      }
-    }
-
-    function logout() {
-        localStorage.removeItem("admin");
-        location.reload();
-    }
-
-    // --- DATA HANDLING ---
-
-    async function loadBookings() {
-      const container = document.getElementById("bookingsList");
-      const loading = document.getElementById("loadingState");
-      
-      container.innerHTML = "";
-      loading.classList.remove("hidden"); // Show spinner
-
-      try {
-          const res = await fetch("https://backendwithapi.onrender.com/api/bookings");
-          const data = await res.json();
-          allBookings = data; // Save to global variable for filtering
-          renderTable(allBookings);
-          calculateStats(allBookings);
-      } catch (error) {
-          showToast("Failed to fetch bookings", "error");
-      } finally {
-          loading.classList.add("hidden"); // Hide spinner
-      }
-    }
-
-    function calculateStats(data) {
-        document.getElementById('statTotal').innerText = data.length;
-        document.getElementById('statPending').innerText = data.filter(b => !b.status || b.status === 'pending').length;
-        document.getElementById('statCompleted').innerText = data.filter(b => b.status === 'completed').length;
-    }
-
-    function renderTable(data) {
-        const container = document.getElementById("bookingsList");
-        const emptyState = document.getElementById("emptyState");
-        container.innerHTML = "";
-
-        if(data.length === 0) {
-            emptyState.classList.remove('hidden');
-            return;
-        } else {
-            emptyState.classList.add('hidden');
-        }
-
-        data.forEach(b => {
-            const tr = document.createElement("tr");
-            tr.className = "hover:bg-gray-50 transition border-b border-gray-50 last:border-0";
-            
-            // Safe JSON stringify for the button
-            const jsonString = JSON.stringify(b).replace(/"/g, '&quot;');
-
-            tr.innerHTML = `
-            <td class="px-6 py-4">
-                <div class="flex items-center gap-3">
-                    <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-xs">
-                        ${b.name.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                        <div class="font-semibold text-gray-900">${b.name}</div>
-                        <div class="text-xs text-gray-500">${b.phone}</div>
-                    </div>
-                </div>
-            </td>
-            <td class="px-6 py-4 text-gray-600">
-                <div class="flex items-center gap-2">
-                    <i class="ph ph-device-mobile text-lg text-gray-400"></i>
-                    ${b.device}
-                </div>
-            </td>
-            <td class="px-6 py-4">
-                ${getStatusBadge(b.status || 'pending')}
-            </td>
-            <td class="px-6 py-4 text-right">
-                <button onclick="openModal('${b._id}')" class="text-green-600 hover:text-green-800 font-medium text-sm border border-green-200 hover:border-green-600 px-3 py-1 rounded-lg transition">
-                    Manage
-                </button>
-            </td>
-            `;
-            container.appendChild(tr);
-        });
-    }
-
-    function filterBookings() {
-        const query1 = document.getElementById('searchInput').value.toLowerCase();
-        const query2 = document.getElementById('mobileSearch').value.toLowerCase();
-        const query = query1 || query2;
-
-        const filtered = allBookings.filter(b => 
-            b.name.toLowerCase().includes(query) || 
-            b.phone.includes(query) || 
-            b.device.toLowerCase().includes(query)
-        );
-        renderTable(filtered);
-    }
-
-    // --- MODAL ACTIONS ---
-
-    function openModal(id) {
-        // Find the specific object from our global array
-        const b = allBookings.find(item => item._id === id);
-        if(!b) return;
-
-        selectedBooking = b;
-        
-        document.getElementById("modalInitials").innerText = b.name.charAt(0).toUpperCase();
-        document.getElementById("modalName").innerText = b.name;
-        document.getElementById("modalPhone").innerText = b.phone;
-        document.getElementById("modalDevice").innerText = b.device;
-        document.getElementById("modalIssue").innerText = b.issue;
-        document.getElementById("modalStatus").innerHTML = getStatusBadge(b.status || 'pending');
-
-        document.getElementById("modal").classList.remove("hidden");
-    }
-
-    function closeModal() {
-      document.getElementById("modal").classList.add("hidden");
-    }
-
-    async function updateStatus(status) {
-      if(!selectedBooking) return;
-      
-      // Optimistic UI Update (Change UI before server responds)
-      document.getElementById("modalStatus").innerHTML = getStatusBadge(status);
-
-      try {
-        await fetch(`https://backendwithapi.onrender.com/api/bookings/${selectedBooking._id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status })
-        });
-        showToast(`Status updated to ${status}`);
-        loadBookings(); // Refresh background data
-      } catch(e) {
-        showToast("Error updating status", "error");
-      }
-    }
-
-    async function sendWhatsapp() {
-        const btn = document.getElementById('waButton');
-        const originalText = btn.innerHTML;
-        
-        // Loading state for button
-        btn.innerHTML = '<i class="ph ph-spinner animate-spin text-xl"></i> Sending...';
-        btn.disabled = true;
-
-        try {
-            await fetch(`https://backendwithapi.onrender.com/api/whatsapp/send`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                    phone: selectedBooking.phone, 
-                    name: selectedBooking.name, 
-                    status: selectedBooking.status 
-                })
-            });
-            showToast("WhatsApp notification sent!");
-        } catch(e) {
-            showToast("Failed to send WhatsApp", "error");
-        } finally {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        }
-    }
-  </script>
+  alert("WhatsApp notification sent!");
+}
+</script>
 </body>
 </html>
