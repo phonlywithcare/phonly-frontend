@@ -543,7 +543,7 @@ bookingForm.addEventListener("submit", async (e) => {
   const device = $("device").value;
   const service = $("service").value;
   const address = $("address").value.trim();
-  const datetime = $("datetime").value;
+  const datetime = $("datetime").value ? new Date($("datetime").value).toISOString() : null;
 
   if (!name || !phone || !device || !service || !address) {
     bookingMsg.textContent = "Please fill required fields.";
@@ -558,7 +558,14 @@ bookingForm.addEventListener("submit", async (e) => {
     const res = await fetch(`${backend}/api/bookings`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, phone, device, service, address, datetime }),
+      body: JSON.stringify({
+        name,
+        phone,
+        device,
+        service,
+        address,
+        datetime: datetime || "",
+      }),
     });
 
     const data = await res.json();
@@ -576,6 +583,7 @@ bookingForm.addEventListener("submit", async (e) => {
     bookingMsg.style.color = "#cc2020";
   }
 });
+
 
 // --------------------------------------------
 // REVIEWS — SUBMIT
@@ -661,6 +669,7 @@ loadReviews();
 
 </body>
 </html>
+
 
 
 
