@@ -455,11 +455,11 @@
             <div class="small muted">Use code FIRST10 when you confirm over call.</div>
           </div>
           <div class="offer">
-            <strong>Screen + Battery combo in just ₹1599 </strong>
+            <strong>Screen + Battery combo ₹999 off</strong>
             <div class="small muted">Limited time. Available for select models.</div>
           </div>
           <div class="offer">
-            <strong>Free gifts on your first repair</strong>
+            <strong>Free diagnostic at home</strong>
             <div class="small muted">If you proceed with the repair we deduct the diagnostic fee.</div>
           </div>
         </div>
@@ -543,7 +543,7 @@ bookingForm.addEventListener("submit", async (e) => {
   const device = $("device").value;
   const service = $("service").value;
   const address = $("address").value.trim();
-  const datetime = $("datetime").value ? new Date($("datetime").value).toISOString() : null;
+  const datetime = $("datetime").value;
 
   if (!name || !phone || !device || !service || !address) {
     bookingMsg.textContent = "Please fill required fields.";
@@ -558,14 +558,7 @@ bookingForm.addEventListener("submit", async (e) => {
     const res = await fetch(`${backend}/api/bookings`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        phone,
-        device,
-        service,
-        address,
-        datetime: datetime || "",
-      }),
+      body: JSON.stringify({ name, phone, device, service, address, datetime }),
     });
 
     const data = await res.json();
@@ -583,7 +576,6 @@ bookingForm.addEventListener("submit", async (e) => {
     bookingMsg.style.color = "#cc2020";
   }
 });
-
 
 // --------------------------------------------
 // REVIEWS — SUBMIT
@@ -669,7 +661,6 @@ loadReviews();
 
 </body>
 </html>
-
 
 
 
