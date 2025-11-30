@@ -433,6 +433,36 @@
             btn.disabled = false;
         }
     }
+    // --- NEW BOOKING AUTO NOTIFICATION SETUP ---
+
+let lastBookingCount = 0;
+
+// Check for new bookings every 10 seconds
+async function checkNewBookings() {
+    try {
+        const res = await fetch("https://backendwithapi.onrender.com/api/bookings");
+        const data = await res.json();
+
+        if (data.length > lastBookingCount) {
+            // New booking arrived
+            showToast("🔔 New Booking Received!");
+            loadBookings(); // Refresh table
+        }
+
+        lastBookingCount = data.length;
+    } catch (err) {
+        console.log("Auto-check error", err);
+    }
+}
+
+// Start checking every 10 seconds
+setInterval(checkNewBookings, 10000);
+
+// After first manual load, start tracking live updates
+loadBookings().then(() => {
+    lastBookingCount = allBookings.length;
+});
   </script>
 </body>
+
 </html>
