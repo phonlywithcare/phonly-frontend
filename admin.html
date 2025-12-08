@@ -1,422 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Phonly Admin | Professional Dashboard</title>
-  <link rel="shortcut icon" href="/logo.png.png" type="image/x-icon">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phonly Admin Dashboard</title>
 
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    /* Smooth transition for toast notifications */
-    .toast { transition: all 0.5s ease-in-out; opacity: 0; transform: translateY(20px); }
-    .toast.show { opacity: 1; transform: translateY(0); }
-  </style>
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #f5f5f5;
+}
+.hidden { display: none; }
+
+.login-box, .dashboard {
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+input, button, select {
+  padding: 10px;
+  margin: 5px 0;
+  width: 100%;
+}
+
+button {
+  background: #18a51a;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+button:hover { opacity: 0.9; }
+
+.table-box {
+  margin-top: 20px;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.manage-btn {
+  background: #0066ff;
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #222;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 6px;
+  opacity: 0;
+  transition: 0.3s;
+  z-index: 9999;
+}
+
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  justify-content: center; align-items: center;
+}
+.modal-box {
+  background: white;
+  padding: 20px;
+  width: 350px;
+  border-radius: 10px;
+}
+</style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body>
 
-  <div id="loginScreen" class="flex items-center justify-center h-screen w-full bg-gradient-to-br from-green-50 to-green-100 p-4">
-    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm border border-gray-100">
-      <div class="flex justify-center mb-6">
-        <div class="bg-green-100 p-3 rounded-full">
-            <i class="ph ph-lock-key text-3xl text-green-600"></i>
-        </div>
-      </div>
-      <h2 class="text-2xl font-bold text-center mb-2 text-gray-800">Welcome Back</h2>
-      <p class="text-center text-gray-500 mb-6 text-sm">Enter your credentials to access the panel.</p>
-      
-      <div class="space-y-4">
-        <div>
-            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Email Address</label>
-            <input id="email" type="email" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition" placeholder="admin@phonly.com" />
-        </div>
-        <div>
-            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Password</label>
-            <input id="password" type="password" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition" placeholder="••••••" />
-        </div>
-        <button onclick="login()" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold p-3 rounded-lg transition shadow-md shadow-green-200">Sign In</button>
-      </div>
-    </div>
+<!-- ================= LOGIN SCREEN ================= -->
+<div id="loginScreen" class="login-box">
+  <h2>Admin Login</h2>
+  <input id="email" type="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- ================= DASHBOARD ================= -->
+<div id="dashboardScreen" class="dashboard hidden">
+
+  <h2>📊 Booking Dashboard</h2>
+  <button onclick="logout()" style="background:#ff3b3b;">Logout</button>
+
+  <div class="table-box">
+    <h3>All Bookings</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Service</th>
+          <th>Status</th>
+          <th>Manage</th>
+        </tr>
+      </thead>
+      <tbody id="bookingTable"></tbody>
+    </table>
   </div>
 
-  <div id="dashboardScreen" class="hidden flex h-screen overflow-hidden">
-    
-    <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
-      <div class="p-6 border-b border-gray-100 flex items-center gap-2">
-        <div class="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold">P</div>
-        <span class="text-xl font-bold tracking-tight">Phonly<span class="text-green-600">Admin</span></span>
-      </div>
+</div>
 
-      <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
-        <a href="#" class="flex items-center gap-3 px-4 py-3 bg-green-50 text-green-700 rounded-lg font-medium">
-          <i class="ph ph-squares-four text-xl"></i> Dashboard
-        </a>
-        <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg transition">
-          <i class="ph ph-users text-xl"></i> Customers
-        </a>
-        <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg transition">
-          <i class="ph ph-gear text-xl"></i> Settings
-        </a>
-      </nav>
+<!-- ================= MODAL ================= -->
+<div id="manageModal" class="modal">
+  <div class="modal-box">
+    <h3>Manage Booking</h3>
+    <p><b>Name:</b> <span id="mName"></span></p>
+    <p><b>Phone:</b> <span id="mPhone"></span></p>
+    <p><b>Service:</b> <span id="mService"></span></p>
+    <p><b>Address:</b> <span id="mAddress"></span></p>
+    <p><b>Date:</b> <span id="mDate"></span></p>
 
-      <div class="p-4 border-t border-gray-100">
-        <button onclick="logout()" class="flex items-center gap-3 px-4 py-2 w-full text-red-600 hover:bg-red-50 rounded-lg transition text-sm font-medium">
-          <i class="ph ph-sign-out text-lg"></i> Logout
-        </button>
-      </div>
-    </aside>
+    <label>Status</label>
+    <select id="statusSelect">
+      <option>Pending</option>
+      <option>In Progress</option>
+      <option>Completed</option>
+    </select>
 
-    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
-      
-      <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 z-10">
-        <div class="md:hidden font-bold text-lg">Phonly</div> <div class="relative w-full max-w-md hidden md:block">
-          <i class="ph ph-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-lg"></i>
-          <input type="text" id="searchInput" onkeyup="filterBookings()" placeholder="Search by name, phone, or device..." class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white transition text-sm">
-        </div>
-
-        <div class="flex items-center gap-4">
-          <button onclick="loadBookings()" class="p-2 text-gray-500 hover:text-green-600 transition" title="Refresh Data">
-            <i class="ph ph-arrows-clockwise text-xl"></i>
-          </button>
-          <div class="h-8 w-8 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold text-xs">
-            AD
-          </div>
-        </div>
-      </header>
-
-      <div class="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50">
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-500">Total Bookings</p>
-                    <h3 class="text-2xl font-bold text-gray-800 mt-1" id="statTotal">0</h3>
-                </div>
-                <div class="p-3 bg-blue-50 text-blue-600 rounded-lg"><i class="ph ph-clipboard-text text-xl"></i></div>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-500">Pending</p>
-                    <h3 class="text-2xl font-bold text-gray-800 mt-1" id="statPending">0</h3>
-                </div>
-                <div class="p-3 bg-yellow-50 text-yellow-600 rounded-lg"><i class="ph ph-clock text-xl"></i></div>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-500">Completed</p>
-                    <h3 class="text-2xl font-bold text-gray-800 mt-1" id="statCompleted">0</h3>
-                </div>
-                <div class="p-3 bg-green-50 text-green-600 rounded-lg"><i class="ph ph-check-circle text-xl"></i></div>
-            </div>
-        </div>
-
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-bold text-gray-800">Recent Bookings</h2>
-            <input type="text" id="mobileSearch" onkeyup="filterBookings()" placeholder="Search..." class="md:hidden border rounded px-3 py-1 text-sm">
-        </div>
-
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div id="loadingState" class="hidden p-8 text-center">
-                <i class="ph ph-spinner animate-spin text-3xl text-green-600"></i>
-                <p class="text-gray-500 mt-2 text-sm">Fetching data...</p>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-gray-50 border-b border-gray-100 text-xs uppercase text-gray-500 font-semibold">
-                        <tr>
-                            <th class="px-6 py-4">Customer</th>
-                            <th class="px-6 py-4">Device Info</th>
-                            <th class="px-6 py-4">Status</th>
-                            <th class="px-6 py-4 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bookingsList" class="divide-y divide-gray-100 text-sm">
-                        </tbody>
-                </table>
-                <div id="emptyState" class="hidden p-8 text-center text-gray-500">
-                    <p>No bookings found.</p>
-                </div>
-            </div>
-        </div>
-      </div>
-    </main>
+    <button onclick="updateStatus()">Update</button>
+    <button onclick="closeModal()" style="background:#555;">Close</button>
   </div>
+</div>
 
-  <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-gray-900 bg-opacity-40 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
-    
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg relative z-10 overflow-hidden transform transition-all scale-100">
-      
-      <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-        <h3 class="text-lg font-bold text-gray-800">Booking Details</h3>
-        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition"><i class="ph ph-x text-xl"></i></button>
-      </div>
-
-      <div class="p-6">
-        <div class="flex items-center gap-4 mb-6">
-            <div class="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-xl" id="modalInitials">
-                ?
-            </div>
-            <div>
-                <h2 id="modalName" class="text-xl font-bold text-gray-900"></h2>
-                <p id="modalPhone" class="text-gray-500 text-sm"></p>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
-                <p class="text-xs text-gray-400 uppercase font-bold">Device</p>
-                <p id="modalDevice" class="font-medium text-gray-800"></p>
-            </div>
-            <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
-                <p class="text-xs text-gray-400 uppercase font-bold">Current Status</p>
-                <p id="modalStatus" class="font-medium text-gray-800"></p>
-            </div>
-        </div>
-        
-        <div class="mb-6">
-            <p class="text-xs text-gray-400 uppercase font-bold mb-1">Issue Description</p>
-            <p id="modalIssue" class="text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-100"></p>
-        </div>
-
-        <p class="text-xs text-gray-400 uppercase font-bold mb-2">Update Status</p>
-        <div class="grid grid-cols-3 gap-2 mb-4">
-            <button onclick="updateStatus('accepted')" class="flex flex-col items-center justify-center p-3 rounded-lg border border-blue-100 bg-blue-50 text-blue-700 hover:bg-blue-100 transition">
-                <i class="ph ph-thumbs-up text-lg mb-1"></i>
-                <span class="text-xs font-semibold">Accept</span>
-            </button>
-            <button onclick="updateStatus('ontheway')" class="flex flex-col items-center justify-center p-3 rounded-lg border border-orange-100 bg-orange-50 text-orange-700 hover:bg-orange-100 transition">
-                <i class="ph ph-moped text-lg mb-1"></i>
-                <span class="text-xs font-semibold">On Way</span>
-            </button>
-            <button onclick="updateStatus('completed')" class="flex flex-col items-center justify-center p-3 rounded-lg border border-green-100 bg-green-50 text-green-700 hover:bg-green-100 transition">
-                <i class="ph ph-check-circle text-lg mb-1"></i>
-                <span class="text-xs font-semibold">Complete</span>
-            </button>
-        </div>
-
-        <button onclick="sendWhatsapp()" id="waButton" class="w-full flex items-center justify-center gap-2 bg-green-600 text-white p-3 rounded-xl hover:bg-green-700 transition shadow-lg shadow-green-200">
-            <i class="ph ph-whatsapp-logo text-xl"></i> Send WhatsApp Update
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+<!-- ================= JS SCRIPT ================= -->
 <script>
-    let selectedBooking = null;
-    let allBookings = [];
+const API = "https://backendwithapi.onrender.com";
 
-    // TOAST
-    function showToast(message, type = 'success') {
-        const container = document.getElementById('toastContainer');
-        const toast = document.createElement('div');
+let selectedBookingId = null;
 
-        const colorClass = type === 'success'
-            ? 'bg-gray-800 text-white'
-            : 'bg-red-500 text-white';
+// ========== Show Toast ==========
+function showToast(msg){
+  const t = document.createElement("div");
+  t.className = "toast";
+  t.innerText = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{ t.style.opacity = 1; },100);
+  setTimeout(()=>{ t.style.opacity = 0; t.remove(); },2500);
+}
 
-        const icon = type === 'success'
-            ? '<i class="ph ph-check-circle text-green-300"></i>'
-            : '<i class="ph ph-warning-circle"></i>';
+// ========== LOGIN ==========
+async function login(){
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-        toast.className = `toast flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-sm font-medium ${colorClass}`;
-        toast.innerHTML = `${icon}<span>${message}</span>`;
-        container.appendChild(toast);
+  const res = await fetch(`${API}/api/admin/login`, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({email, password})
+  });
 
-        setTimeout(() => toast.classList.add('show'), 10);
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 500);
-        }, 3000);
-    }
+  const data = await res.json();
 
-    // STATUS BADGE
-    function getStatusBadge(status) {
-        status = status?.toLowerCase() || "pending";
+  if(data.success){
+    localStorage.setItem("admin","true");
+    document.getElementById("loginScreen").classList.add("hidden");
+    document.getElementById("dashboardScreen").classList.remove("hidden");
+    loadBookings();
+  } else {
+    showToast("Invalid Login");
+  }
+}
 
-        const styles = {
-            completed: "bg-green-100 text-green-700 border-green-200",
-            accepted: "bg-blue-100 text-blue-700 border-blue-200",
-            ontheway: "bg-orange-100 text-orange-700 border-orange-200",
-            pending: "bg-gray-100 text-gray-600 border-gray-200"
-        };
+// ========== LOGOUT ==========
+function logout(){
+  localStorage.removeItem("admin");
+  location.reload();
+}
 
-        const labels = {
-            completed: "Completed",
-            accepted: "Accepted",
-            ontheway: "On The Way",
-            pending: "Pending"
-        };
+// ========== LOAD BOOKINGS ==========
+async function loadBookings(){
+  const res = await fetch(`${API}/api/bookings`);
+  const bookings = await res.json();
 
-        return `<span class="px-2 py-1 rounded-full text-xs font-bold border ${styles[status]}">${labels[status]}</span>`;
-    }
+  const table = document.getElementById("bookingTable");
+  table.innerHTML = "";
 
-    // LOGIN
-    if (localStorage.getItem("admin") === "true") {
-        document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('dashboardScreen').classList.remove('hidden');
-        loadBookings();
-    }
+  bookings.forEach(b=>{
+    table.innerHTML += `
+      <tr>
+        <td>${b.bookingId}</td>
+        <td>${b.name}</td>
+        <td>${b.phone}</td>
+        <td>${b.service}</td>
+        <td>${b.status}</td>
+        <td>
+          <button class="manage-btn" onclick='openModal(${JSON.stringify(b)})'>Manage</button>
+        </td>
+      </tr>`;
+  });
+}
 
-    function login() {
-        const email = emailInput.value;
-        const password = passwordInput.value;
+// ========== OPEN MODAL ==========
+function openModal(b){
+  selectedBookingId = b._id;
 
-        if (email === "admin@phonly.com" && password === "123456") {
-            localStorage.setItem("admin", "true");
-            loginScreen.classList.add('hidden');
-            dashboardScreen.classList.remove('hidden');
-            showToast("Welcome back, Admin!");
-            loadBookings();
-        } else {
-            showToast("Invalid Credentials", "error");
-        }
-    }
+  document.getElementById("mName").innerText = b.name;
+  document.getElementById("mPhone").innerText = b.phone;
+  document.getElementById("mService").innerText = b.service;
+  document.getElementById("mAddress").innerText = b.address;
+  document.getElementById("mDate").innerText = b.datetime;
 
-    function logout() {
-        localStorage.removeItem("admin");
-        location.reload();
-    }
+  document.getElementById("statusSelect").value = b.status;
 
-    // LOAD BOOKINGS
-    async function loadBookings() {
-        const container = bookingsList;
-        const loading = loadingState;
+  document.getElementById("manageModal").style.display = "flex";
+}
 
-        container.innerHTML = "";
-        loading.classList.remove("hidden");
+// ========== CLOSE MODAL ==========
+function closeModal(){
+  document.getElementById("manageModal").style.display = "none";
+}
 
-        try {
-            const res = await fetch("https://backendwithapi.onrender.com/api/bookings");
-            const data = await res.json();
+// ========== UPDATE STATUS ==========
+async function updateStatus(){
+  const status = document.getElementById("statusSelect").value;
 
-            allBookings = data;
-            renderTable(data);
-            calculateStats(data);
-        } catch (err) {
-            showToast("Failed to load bookings", "error");
-        }
+  await fetch(`${API}/api/bookings/${selectedBookingId}`, {
+    method:"PUT",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ status })
+  });
 
-        loading.classList.add("hidden");
-    }
+  showToast("Status Updated");
+  closeModal();
+  loadBookings();
+}
 
-    function calculateStats(data) {
-        statTotal.innerText = data.length;
-        statPending.innerText = data.filter(b => !b.status || b.status === "pending").length;
-        statCompleted.innerText = data.filter(b => b.status === "completed").length;
-    }
+// ========== REAL-TIME ALERTS ==========
+let lastCount = 0;
+let sound = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
 
-    // RENDER LIST
-    function renderTable(data) {
-        const container = bookingsList;
-        const emptyState = document.getElementById("emptyState");
+setInterval(async ()=>{
+  const res = await fetch(`${API}/api/bookings`);
+  const data = await res.json();
 
-        container.innerHTML = "";
+  if (data.length > lastCount){
+    let newCount = data.length - lastCount;
+    showToast(`🔔 ${newCount} New Booking!`);
+    sound.play();
+    loadBookings();
+  }
 
-        if (data.length === 0) {
-            emptyState.classList.remove("hidden");
-            return;
-        }
+  lastCount = data.length;
 
-        emptyState.classList.add("hidden");
+}, 8000); // every 8 seconds
 
-        data.forEach(b => {
-            container.innerHTML += `
-                <tr class="hover:bg-gray-50 transition">
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-2">
-                            <div class="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold">
-                                ${b.name.charAt(0).toUpperCase()}
-                            </div>
-                            <div>
-                                <div class="font-semibold">${b.name}</div>
-                                <div class="text-xs text-gray-500">${b.phone}</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">${b.device}</td>
-                    <td class="px-6 py-4">${getStatusBadge(b.status)}</td>
-                    <td class="px-6 py-4 text-right">
-                        <button onclick="openModal('${b._id}')" class="text-green-600 border border-green-300 px-3 py-1 rounded-lg hover:bg-green-50">
-                            Manage
-                        </button>
-                    </td>
-                </tr>
-            `;
-        });
-    }
-
-    // SEARCH
-    function filterBookings() {
-        const q1 = searchInput?.value.toLowerCase() || "";
-        const q2 = mobileSearch?.value.toLowerCase() || "";
-        const q = q1 || q2;
-
-        const filtered = allBookings.filter(b =>
-            b.name.toLowerCase().includes(q) ||
-            b.phone.includes(q) ||
-            b.device.toLowerCase().includes(q)
-        );
-
-        renderTable(filtered);
-    }
-
-    // MODAL
-    function openModal(id) {
-        const b = allBookings.find(x => x._id === id);
-        if (!b) return;
-
-        selectedBooking = b;
-
-        modalInitials.innerText = b.name.charAt(0).toUpperCase();
-        modalName.innerText = b.name;
-        modalPhone.innerText = b.phone;
-        modalDevice.innerText = b.device;
-        modalIssue.innerText = b.issue;
-        modalStatus.innerHTML = getStatusBadge(b.status);
-
-        modal.classList.remove("hidden");
-    }
-
-    function closeModal() {
-        modal.classList.add("hidden");
-    }
-
-    // UPDATE STATUS
-    async function updateStatus(status) {
-        if (!selectedBooking) return;
-
-        modalStatus.innerHTML = getStatusBadge(status);
-
-        try {
-            await fetch(`https://backendwithapi.onrender.com/api/bookings/${selectedBooking._id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status })
-            });
-
-            showToast(`Status updated to ${status}`);
-            loadBookings();
-        } catch (err) {
-            showToast("Failed to update status", "error");
-        }
-    }
-
-    // WHATSAPP MESSAGE
-    function sendWhatsapp() {
-        if (!selectedBooking) return;
-
-        const msg = encodeURIComponent(
-            `Hello ${selectedBooking.name},\n\nYour booking status has been updated.\n\nStatus: ${selectedBooking.status}\nDevice: ${selectedBooking.device}\nIssue: ${selectedBooking.issue}\n\nThank you!`
-        );
-
-        window.open(`https://wa.me/${selectedBooking.phone}?text=${msg}`, "_blank");
-    }
+// ========== AUTO LOGIN IF SESSION EXISTS ==========
+if(localStorage.getItem("admin")){
+  document.getElementById("loginScreen").classList.add("hidden");
+  document.getElementById("dashboardScreen").classList.remove("hidden");
+  loadBookings();
+}
 </script>
 
 </body>
