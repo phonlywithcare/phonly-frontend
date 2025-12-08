@@ -1,662 +1,305 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Phonly — Mobile Phone Repair at Home</title>
-  <meta name="description" content="Phonly — We come to your home and fix your phone. Fast, affordable, reliable. Book online!" />
-  <link rel="shortcut icon" href="/logo.png.png" type="image/x-icon">
- <style>
-    :root{
-      --green-700:#1f8a2f;
-      --green-500:#3bb54a;
-      --green-200:#e6f6e8;
-      --dark:#072018;
-      --muted:#4b5b54
-      --glass: rgba(255,255,255,0.06);
-      --radius:16px;
-      --shadow: 0 6px 20px rgba(5,45,30,0.25);
-      --accent:#77d07a;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      background:linear-gradient(180deg, #04120a 0%, #061811 100%);
-      color: #0b2b1c;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      line-height:1.4;
-    }
-
-    .container{
-      max-width:1100px;
-      margin:28px auto;
-      padding:24px;
-    }
-
-    header{
-      display:flex;
-      align-items:center;
-      gap:16px;
-      justify-content:space-between;
-      margin-bottom:18px;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      color:var(--green-200);
-      text-decoration:none;
-    }
-    .brand img{
-      width:68px;
-      height:68px;
-      object-fit:contain;
-      border-radius:12px;
-      background:linear-gradient(135deg,var(--green-500),#b6f7b9);
-      padding:6px;
-      box-shadow: 0 6px 18px rgba(10,40,15,0.45);
-    }
-    .brand h1{font-size:20px;margin:0;color:#e8fff0}
-    .brand p{margin:0;font-size:12px;color:#bfe9c9}
-
-    nav .cta{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      background:var(--green-500);
-      color:#06311a;
-      padding:10px 14px;
-      border-radius:12px;
-      text-decoration:none;
-      font-weight:700;
-      box-shadow:var(--shadow);
-    }
-
-    /* Hero */
-    .hero{
-      background:linear-gradient(180deg, rgba(59,181,74,0.06), rgba(59,181,74,0.02));
-      border-radius:20px;
-      padding:24px;
-      display:grid;
-      grid-template-columns: 1fr 420px;
-      gap:20px;
-      align-items:center;
-      box-shadow: 0 12px 40px rgba(15,45,20,0.35);
-      border:1px solid rgba(120,220,140,0.06);
-    }
-    .hero .left h2{
-      margin:0 0 8px 0;
-      color:#eaffef;
-      font-size:28px;
-      letter-spacing:-0.3px;
-    }
-    .hero .left p{color:#cdeeca;margin:0 0 18px 0}
-    .pill-features{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .pill{
-      background:var(--green-200);
-      color:var(--dark);
-      padding:8px 12px;
-      border-radius:999px;
-      font-weight:600;
-      font-size:13px;
-      box-shadow: 0 6px 18px rgba(6,20,10,0.2);
-    }
-
-    /* booking card */
-    .card{
-      background:linear-gradient(180deg,#ffffff 0%, #f3fff8 100%);
-      border-radius:16px;
-      padding:16px;
-      box-shadow: 0 18px 50px rgba(3,20,10,0.25);
-      border:1px solid rgba(12,60,30,0.06);
-    }
-    .card h3{margin:0 0 8px 0;color:var(--dark)}
-    .card p{margin:0 0 12px 0;color:var(--muted);font-size:14px}
-
-    .form-row{display:flex;gap:10px}
-    .form-row .field{flex:1}
-    label{display:block;font-size:13px;margin-bottom:6px;color:#235135}
-    input[type="text"], input[type="tel"], input[type="datetime-local"], select, textarea{
-      width:100%;
-      padding:10px 12px;
-      border-radius:10px;
-      border:1px solid rgba(8,40,22,0.08);
-      outline:none;
-      font-size:14px;
-    }
-    textarea{min-height:84px;resize:vertical}
-
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      background:var(--green-700);
-      color:#eaffef;
-      padding:10px 14px;
-      border-radius:12px;
-      border:none;
-      cursor:pointer;
-      font-weight:700;
-      box-shadow: 0 10px 30px rgba(10,50,20,0.28);
-    }
-    .btn.secondary{
-      background:transparent;
-      color:var(--green-500);
-      border:1px solid rgba(50,160,80,0.12);
-      font-weight:600;
-    }
-
-    /* sections */
-    section{margin-top:22px}
-    .grid-3{
-      display:grid;
-      gap:16px;
-      grid-template-columns: repeat(3,1fr);
-    }
-    .service{
-      background:linear-gradient(180deg, rgba(235, 237, 236, 0.02), rgba(255,255,255,0.01));
-      background-color:var(--green-500);
-      padding:18px;border-radius:14px;border:1px solid rgba(10,40,20,0.04)
-    }
-    .service h4{
-      margin:0;
-      color:#eaffef;
-      font-size:15px;
-      
-    }
-    .service p{
-      margin-top: 10px;
-      color: #eaffef;
-      font-size: 12px;
-    }
-    .offers{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .offer{
-      background:linear-gradient(90deg,#eaffef,#e8fbe9);
-      padding:12px;border-radius:12px;border:1px solid rgba(12,80,30,0.06);
-      flex:1 1 260px; min-width:200px;
-    }
-   .reviews-list{display:flex;flex-direction:column;gap:12px}
-    .review{
-      padding:12px;border-radius:10px;background:#ffffff;border:1px solid rgba(20,70,30,0.04)
-    }
-
-
-
-    footer{
-      margin-top:30px;padding:18px;border-radius:12px;background:linear-gradient(0deg,#041b11,#062114);color:#9fe6b6;display:flex;justify-content:space-between;align-items:center;
-    }
-
-    /* floating actions */
-    .floating{
-      position:fixed;
-      right:18px;
-      bottom:18px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      z-index:999;
-    }
-    .floating a{
-      display:inline-flex;align-items:center;gap:8px;padding:12px;border-radius:12px;background:var(--green-500);color:#032b18;text-decoration:none;font-weight:700;box-shadow:0 12px 30px rgba(8,40,18,0.3)
-    }
-
-    /* responsive */
-    @media (max-width:980px){
-      .hero{grid-template-columns:1fr}
-      .grid-3{grid-template-columns:repeat(2,1fr)}
-    }
-    @media (max-width:620px){
-      .grid-3{grid-template-columns:1fr}
-      .brand img{width:54px;height:54px}
-      .hero{padding:18px}
-    }
-
-    /* subtle helper */
-    .muted{color:var(--muted);font-size:13px}
-    .small{font-size:13px;color:#264d35}
-
-    /* Products Section */
-.products-scroll{
-  display:flex;
-  gap:16px;
-  overflow-x:auto;
-  padding:10px 2px 16px 2px;
-  scroll-behavior:smooth;
-}
-
-.products-scroll::-webkit-scrollbar{
-  height:6px;
-}
-.products-scroll::-webkit-scrollbar-thumb{
-  background:var(--green-500);
-  border-radius:20px;
-}
-
-.product-card{
-  min-width:160px;
-  background:#ffffff0a;
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:14px;
-  padding:12px;
-  text-align:center;
-  box-shadow:0 8px 25px rgba(8,25,14,0.25);
-  backdrop-filter:blur(6px);
-}
-.product-card img{
-  width:100%;
-  max-width:120px;
-  border-radius:12px;
-  margin-bottom:8px;
-}
-.product-card h4{
-  margin:0;
-  color:#eaffef;
-  font-size:15px;
-}
-.imp{
-  margin:0;
-  color:#eaffef;
-  font-size:12px;
-}
-.product-card .price{
-  margin-top:4px;
-  color:var(--accent);
-  font-weight:700;
-}
-
-/* Responsive tweak */
-@media (max-width:620px){
-  .product-card{
-    min-width:140px;
-  }
-}
-
-
-
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phonly — Doorstep Mobile Repair</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="shortcut icon" href="/new icon.png" type="image/x-icon">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <a class="brand" href="#">
-        <img src="/logo.png.png" alt="Phonly logo" id="logoImg" onerror="this.style.display='none'"/>
-        <div>
-          <h1>Phonly</h1>
-          <p>Phone repair — at your home</p>
-        </div>
-      </a>
-      <nav>
-        <a class="cta" href="#booking">Book Repair</a>
-      </nav>
-    </header>
 
-    <main>
-      <section class="hero" aria-labelledby="hero-heading">
-        <div class="left">
-          <h2 id="hero-heading">Fast phone repair at your doorstep</h2>
-          <p>We fix screens, batteries, cameras, water damage and more — professionally and quickly at your home.</p>
-          <p>“Fix your phone — without leaving home.”<br>
-              “Phonly: Quality Android repair at your doorstep.”<br>
-              “Your phone fixed, your day uninterrupted.”</p>
-
-          <div class="pill-features">
-            <span class="pill">✅ Same-day visits</span>
-            <span class="pill">🔧 Certified technicians</span>
-            <span class="pill">💳 Pay after repair</span>
-          </div>
-          <div style="margin-top:16px;">
-            <a class="btn" href="#booking">Book a repair</a>
-            <a class="btn secondary" href="#offers">View offers</a>
-          </div>
-          <p class="small" style="margin-top:10px">Serving nearby areas — we come to your home with original-quality parts & a 30-day warranty.</p>
-        </div>
-
-        <aside class="card" id="booking">
-          <h3>Book a repair</h3>
-          <p class="muted">Tell us where and when. We'll confirm by phone.</p>
-
-          <form id="bookingForm" class="stack" autocomplete="on" novalidate>
-            <div class="form-row">
-              <div class="field">
-                <label for="name">Full name</label>
-                <input id="name" type="text" required placeholder="Your name" />
-              </div>
-              <div class="field">
-                <label for="phone">Phone number</label>
-                <input id="phone" type="tel" inputmode="tel" required placeholder="+91 1234567890"/>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="field">
-                <label for="device">Brand</label>
-                <select id="device" required>
-                  <option value="">Select device</option>
-                  <option>iPhone</option>
-                  <option>Samsung</option>
-                  <option>OnePlus / Oppo / Vivo</option>
-                  <option>Xiaomi</option>
-                  <option>Redmi</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="service">Service</label>
-                <select id="service" required>
-                  <option value="">Select issue</option>
-                  <option>Screen replacement</option>
-                  <option>Battery replacement</option>
-                  <option>Water damage</option>
-                  <option>Camera repair</option>
-                  <option>Software / slow phone</option>
-                  <option>Other</option>
-                </select>
-              </div>
-            </div>
-
-            <div style="margin-top:12px;">
-              <label for="address">Address (where technician will come)</label>
-              <input id="address" type="text" placeholder="House no, street, city, pincode" required />
-            </div>
-
-            <div style="margin-top:12px;" class="form-row">
-              <div class="field">
-                <label for="datetime">Preferred date & time</label>
-                <input id="datetime" type="datetime-local" required /> </div>
-              <div class="field">
-                <label>&nbsp;</label>
-                <button type="submit" class="btn" style="width:100%">Confirm booking</button>
-              </div>
-            </div>
-
-            <p id="bookingMsg" class="muted" style="margin-top:10px"></p>
-          </form>
-        </aside>
-      </section>
-
-      <section id="products" aria-labelledby="productsHeading">
-  <h2 id="productsHeading" style="color:#e8fff0;margin:14px 0">Our Service</h2>
-
-  <div class="products-scroll">
-    <div class="product-card">
-      <img src="/folder.webp" alt="Screen replacement">
-      <h4>Screen replacement</h4>
-      <p class="price">₹999/-(copy)</p>
-      <p class="imp"> original parts depends on model</p>
+<!-- ================= HEADER ================= -->
+<!-- <header class="header">
+  <div class="header-left">
+    <img src="/logo.png" class="logo" />
+    <div class="brand-text">
+      <h1>Phonly</h1>
+      <p>Doorstep Mobile Repair</p>
     </div>
+  </div>
 
-    <div class="product-card">
-      <img src="/bn37.jpg" alt="Battery">
-      <h4>Battery</h4>
-      <p class="price">₹999/-</p>
-      <p class="imp"> With 6 months warranty</p>
+  <nav class="nav-links">
+    <a href="#home">Home</a>
+    <a href="#services">Services</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#contact">Contact</a>
+    <button id="openLogin" class="login-btn">Login</button>
+  </nav>
+</header> -->
+
+<header class="header">
+  <div class="header-left">
+    <a href="index.html"><img src="/new icon.png" class="logo" /></a>
+    <div class="brand-text">
+      <h1>Phonly</h1>
+      <p>Doorstep Mobile Repair</p>
     </div>
+  </div>
 
-    <div class="product-card">
-      <img src="/cc.webp" alt="charging sub-board">
-      <h4>Charging sub-board (copy)</h4>
-      <p class="price">₹199/-</p>
-      <p class="imp"> original depends on model</p>
-    </div>
+  <nav class="nav-links" id="navLinks">
+    <a href="#home">Home</a>
+    <a href="#services">Services</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#contact">Contact</a>
+    <a href="/Status.html">Status</a>
+    <button id="openLogin" class="login-btn">Login</button>
+  </nav>
 
-    <div class="product-card">
-      <img src="/frame.webp" alt="Middel/Frame">
-      <h4>Middel/Frame</h4>
-      <p class="price">₹299/-</p>
-    </div>
+  <!-- Mobile menu toggle -->
+  <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+    <span class="hamburger"></span>
+  </button>
+</header>
 
-    <div class="product-card">
-      <img src="/pannel.webp" alt="Back-pannel/glass">
-      <h4>Back-pannel/glass</h4>
-      <p class="imp">Depends on model</p>
-      
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="home">
+  <div class="hero-text">
+    <h2>Premium Mobile Repair at Your Home</h2>
+    <p>Trusted, fast and professional doorstep repair by verified experts.</p>
+    <button id="openBooking" class="primary-btn">Book Repair</button>
+  </div>
+
+  <div class="hero-img">
+    <div class="hero-content-box">
+      <h3>Why Choose Phonly?</h3>
+      <ul>
+        <li>✔ Certified and verified technicians</li>
+        <li>✔ 30 minutes quick repair guarantee</li>
+        <li>✔ Original quality spare parts</li>
+        <li>✔ Pay after service</li>
+      </ul>
     </div>
   </div>
 </section>
 
+<!-- ================= OFFERS & DEALS ================= -->
+<section class="offers" id="offers">
+  <h2>🔥 Latest Offers & Deals</h2>
+  <p class="section-sub">Grab exclusive Phonly discounts before they expire!</p>
 
-      <section aria-labelledby="servicesHeading">
-        <h2 id="servicesHeading" style="color:#e8fff0;margin:0 0 10px 0">How it works</h2>
-        <div class="grid-3" style="margin-top:12px">
-          <div class="service">
-            <h4>1. Book online</h4>
-            <p class="small">Quick form takes less than a minute — pick a preferred time or request same-day.</p>
-          </div>
-          <div class="service">
-            <h4>2. Tech visits you</h4>
-            <p class="small">Our certified technician carries parts and tools. Repairs done at your home.</p>
-          </div>
-          <div class="service">
-            <h4>3. Pay & warranty</h4>
-            <p class="small">Pay after repair. 30-day warranty on parts and work.</p>
-          </div>
-        </div>
-      </section>
+  <div class="offer-grid">
+    <div class="offer-card">
+      <h3>₹100 OFF on Screen Replacement</h3>
+      <p>Instant discount for all major brands. Limited time only!</p>
+      <span class="offer-tag">Limited Time Deal</span>
+    </div>
 
-      <section id="offers" aria-labelledby="offersHeading">
-        <h2 id="offersHeading" style="color:#e8fff0;margin:10px 0">Latest offers</h2>
-        <div class="offers">
-          <div class="offer">
-            <strong>10% off first repair</strong>
-            <div class="small muted">Use code FIRST10 when you confirm over call.</div>
-          </div>
-          <div class="offer">
-            <strong>Screen + Battery combo in just ₹1599 </strong>
-            <div class="small muted">Limited time. Available for select models.</div>
-          </div>
-          <div class="offer">
-            <strong>Free gifts on your first repair</strong>
-            <div class="small muted">If you proceed with the repair we deduct the diagnostic fee.</div>
-          </div>
-        </div>
-      </section>
+    <div class="offer-card">
+      <h3>Free Diagnosis</h3>
+      <p>No inspection charge for on-spot repair bookings.</p>
+      <span class="offer-tag green">Best Offer</span>
+    </div>
 
-      <section aria-labelledby="reviewsHeading">
-        <h2 id="reviewsHeading" style="color:#e8fff0;margin:10px 0">Customer reviews</h2>
-
-        <div style="display:grid;grid-template-columns:1fr 320px;gap:16px">
-          <div>
-            <div class="reviews-list" id="reviewsList">
-              </div>
-          </div>
-
-          <aside class="card">
-            <h3>Add a review</h3>
-            <p class="muted">Share your experience — reviews appear immediately.</p>
-            <form id="reviewForm" novalidate>
-              <div class="form-row">
-                <div class="field">
-                  <label for="rname">Name</label>
-                  <input id="rname" type="text" required placeholder="Your name"/>
-                </div>
-                <div class="field">
-                  <label for="rrating">Rating</label>
-                  <select id="rrating" required>
-                    <option value="">Rate</option>
-                    <option value="5">5 — Excellent</option>
-                    <option value="4">4 — Good</option>
-                    <option value="3">3 — Okay</option>
-                    <option value="2">2 — Not good</option>
-                    <option value="1">1 — Poor</option>
-                  </select>
-                </div>
-              </div>
-              <div style="margin-top:10px;">
-                <label for="rtext">Review</label>
-                <textarea id="rtext" placeholder="Tell others what we did well"></textarea>
-              </div>
-              <div style="margin-top:10px;">
-                <button class="btn" type="submit">Post review</button>
-              </div>
-              <p id="reviewMsg" class="muted" style="margin-top:8px"></p>
-            </form>
-          </aside>
-        </div>
-      </section>
-
-    </main>
-
-    <footer>
-      <div>
-        <strong>Phonly</strong><div class="small">Phone repair at home • 30-day warranty</div>
-      </div>
-      <div class="small">Call us: <a href="tel:+917701873075" style="color:var(--accent);text-decoration:none">+91 77018 73075</a></div>
-    </footer>
+    <div class="offer-card">
+      <h3>10% OFF on Battery Replacement</h3>
+      <p>Get a fresh high‑quality battery with doorstep service.</p>
+      <span class="offer-tag">Save More</span>
+    </div>
   </div>
+</section>
 
-  <div class="floating" aria-hidden="false">
-    <a href="https://wa.me/917701873075?text=Hi%20Phonly%20I%20want%20to%20book%20a%20repair" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-    <a href="tel:+917701873075">Call</a>
+<!-- ================= SERVICES ================= -->
+<section class="services" id="services">
+  <h2>Our Services</h2>
+  <p class="section-sub">We fix all major mobile issues with premium parts and expert technicians.</p>
+
+  <div class="service-grid service-big">
+    <div class="service-card big">
+      <img src="/folder.webp" />
+      <h3>Screen Replacement</h3>
+      <p>Cracked or unresponsive screen? Get instant doorstep fix.</p>
+      <span class="price">Starting at ₹999</span>
+    </div>
+
+    <div class="service-card big">
+      <img src="/bn37.jpg" />
+      <h3>Battery Replacement</h3>
+      <p>Phone draining fast or shutting down? Replace with a fresh battery.</p>
+      <span class="price">Starting at ₹799</span>
+    </div>
+
+    <div class="service-card big">
+      <img src="/cc.webp" />
+      <h3>Charging Issue</h3>
+      <p>Not charging or slow charging? We fix ports and internal charging issues.</p>
+      <span class="price">Starting at ₹299</span>
+    </div>
+    
+
+    <div class="service-card big">
+      <img src="/camera.jpg" />
+      <h3>Camera Repair</h3>
+      <p>Blurry camera, glass cracks or focus problems? We fix it onsite.</p>
+      <span class="price">Starting at ₹699</span>
+    </div>
+
+
+    <div class="service-card big">
+      <img src="/frame.webp" />
+      <h3>Middle/Frame</h3>
+      <p>Your phone getting bend or unshaped.</p>
+      <span class="price">Starting at ₹399</span>
+    </div>
+
+
+    <div class="service-card big">
+      <img src="/pannel.webp" />
+      <h3>Back-pannel/glass </h3>
+      <p>Broken back glass or full of scrachts.</p>
+      <span class="price">Starting at ₹499</span>
+    </div>
+
+    <div class="service-card big">
+      <img src="/water.jpg" />
+      <h3>Water Damage</h3>
+      <p>If your gets wet.</p>
+      <span class="price">Starting at ₹1199</span>
+    </div>
+
+    <div class="service-card big">
+      <img src="/lage.jpg" />
+      <h3>Slow Phone / Software</h3>
+      <p>If your gets wet.</p>
+      <span class="price">Starting at ₹499</span>
+    </div>
+    
   </div>
-<script>
-const backend = "https://backendwithapi.onrender.com";
+</section>
 
-// Short helper
-const $ = (id) => document.getElementById(id);
+<!-- ================= REVIEWS ================= -->
+<section class="reviews" id="reviews">
+  <h2>What Our Customers Say</h2>
+  <p class="section-sub">Real reviews from customers who trusted our doorstep repair service.</p>
 
-// --------------------------------------------
-// BOOKING FORM
-// --------------------------------------------
-const bookingForm = $("bookingForm");
-const bookingMsg = $("bookingMsg");
+  <div class="review-grid big-review">
+    <div class="review-card big">
+      <div class="stars">★★★★★</div>
+      <p>“Excellent service! The technician came home and fixed my iPhone screen in 20 minutes. Professional and polite.”</p>
+      <h4>- Rahul Sharma</h4>
+    </div>
 
-bookingForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+    <div class="review-card big">
+      <div class="stars">★★★★★</div>
+      <p>“Highly recommended! My battery issue was resolved immediately. Wonderful experience.”</p>
+      <h4>- Priya Patel</h4>
+    </div>
 
-  const name = $("name").value.trim();
-  const phone = $("phone").value.trim();
-  const device = $("device").value;
-  const service = $("service").value;
-  const address = $("address").value.trim();
-  const datetime = $("datetime").value;
+    <div class="review-card big">
+      <div class="stars">★★★★★</div>
+      <p>“Affordable and fast. The technician explained everything clearly. Great work!”</p>
+      <h4>- Amit Kumar</h4>
+    </div>
 
-  // Updated validation to include datetime
-  if (!name || !phone || !device || !service || !address || !datetime) {
-    bookingMsg.textContent = "Please fill all required fields, including date & time.";
-    bookingMsg.style.color = "#cc2020";
-    return;
-  }
+    <div class="review-card big">
+      <div class="stars">★★★★★</div>
+      <p>“Best doorstep repair ever! Genuine parts, clear pricing, and super fast.”</p>
+      <h4>- Karan Singh</h4>
+    </div>
+  </div>
+</section>
 
-  bookingMsg.textContent = "Submitting...";
-  bookingMsg.style.color = "#1a7b4f";
+<!-- ================= GIVE REVIEW SECTION ================= -->
+<section class="give-review" id="give-review">
+  <h2>Give Your Review</h2>
+  <p class="section-sub">Rate your experience with Phonly</p>
 
-  try {
-    const res = await fetch(`${backend}/api/bookings`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, phone, device, service, address, datetime }),
-    });
+  <form id="reviewForm" class="review-form">
 
-    const data = await res.json();
+    <!-- Star Rating -->
+    <div class="star-rating" id="starRating">
+      <i class="star" data-value="1">★</i>
+      <i class="star" data-value="2">★</i>
+      <i class="star" data-value="3">★</i>
+      <i class="star" data-value="4">★</i>
+      <i class="star" data-value="5">★</i>
+    </div>
 
-    if (res.ok) {
-      bookingMsg.textContent = "Booking sent successfully! We will call you soon.";
-      bookingMsg.style.color = "#1a7b4f";
-      bookingForm.reset();
-    } else {
-      // The server will now log the detailed error, helping you debug deployment issues
-      bookingMsg.textContent = data.message || "Server error. Check backend logs.";
-      bookingMsg.style.color = "#cc2020";
-    }
-  } catch (err) {
-    bookingMsg.textContent = "Network error. Is the backend URL correct?";
-    bookingMsg.style.color = "#cc2020";
-  }
-});
+    <input type="text" id="rName" placeholder="Your Name" required />
+    <textarea id="rMessage" placeholder="Your Review" required></textarea>
+    <button type="submit" class="primary-btn">Submit Review</button>
+  </form>
+</section>
 
-// --------------------------------------------
-// REVIEWS — SUBMIT
-// --------------------------------------------
-const reviewForm = $("reviewForm");
-const reviewMsg = $("reviewMsg");
+<!-- ================= FOOTER ================= -->
+<footer class="footer" id="contact">
+  <div class="footer-grid">
+    <div>
+      <h3>🔧 Phonly</h3>
+      <p>Professional mobile repair at your doorstep.</p>
+    </div>
 
-reviewForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+    <div>
+      <h4>Quick Links</h4>
+      <a>Services</a><br>
+      <a>Dashboard</a>
+    </div>
 
-  const name = $("rname").value.trim();
-  const rating = Number($("rrating").value);
-  const message = $("rtext").value.trim();
+    <div>
+      <h4>Contact</h4>
+      <p>📞 +91 77018 73075</p>
+      <p>✉ phonlywithcare.com</p>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2025 Phonly. All rights reserved.</div>
+</footer>
 
-  if (!name || !rating) {
-    reviewMsg.textContent = "Please enter your name & rating.";
-    reviewMsg.style.color = "#cc2020";
-    return;
-  }
+<!-- ================= POPUP: LOGIN ================= -->
+<div class="popup" id="loginPopup">
+  <div class="popup-box">
+    <h2>Login</h2>
 
-  reviewMsg.textContent = "Submitting...";
-  reviewMsg.style.color = "#1a7b4f";
+    <button class="popup-btn google">
+      <img src="https://www.svgrepo.com/show/475656/google-color.svg"> Login with Google
+    </button>
 
-  try {
-    const res = await fetch(`${backend}/api/reviews`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, rating, message }),
-    });
+    <button class="popup-btn mobile">📱 Login with Mobile</button>
 
-    const data = await res.json();
+    <button class="close-btn" data-close>Close</button>
+  </div>
+</div>
 
-    if (res.ok) {
-      reviewMsg.textContent = "Review submitted!";
-      reviewMsg.style.color = "#1a7b4f";
-      reviewForm.reset();
-      loadReviews();
-    } else {
-      reviewMsg.textContent = data.message || "Server error";
-      reviewMsg.style.color = "#cc2020";
-    }
-  } catch (err) {
-    reviewMsg.textContent = "Network error";
-    reviewMsg.style.color = "#cc2020";
-  }
-});
+<!-- ================= POPUP: BOOKING FORM ================= -->
+<div class="popup" id="bookingPopup">
+  <div class="popup-box">
+    <h2>Book a Repair</h2>
 
-// --------------------------------------------
-// REVIEWS — LOAD
-// --------------------------------------------
-const reviewsContainer = $("reviewsList");
+    <input type="text" placeholder="Full Name" />
+    <input type="text" placeholder="Phone Number" />
 
-async function loadReviews() {
-  reviewsContainer.innerHTML = "<p>Loading reviews...</p>";
+    <select>
+      <option>Select Device</option>
+      <option>iPhone</option>
+      <option>Samsung</option>
+      <option>Vivo</option>
+      <option>Oppo</option>
+      <option>Xiaomi</option>
+      <option>Other</option>
+    </select>
 
-  try {
-    const res = await fetch(`${backend}/api/reviews`);
-    const reviews = await res.json();
+    <input type="text" placeholder="Model">
 
-    if (!Array.isArray(reviews)) {
-      reviewsContainer.innerHTML = "<p>No reviews found.</p>";
-      return;
-    }
+    <select>
+      <option>Select Issue</option>
+      <option>Screen Replacement</option>
+      <option>Battery Issue</option>
+      <option>Charging Issue</option>
+      <option>Water Damage</option>
+      <option>Camera Repair</option>
+      <option>Software / slow phone</option>
+      <option>Other</option>
+    </select>
 
-    reviewsContainer.innerHTML = reviews
-      .map(
-        (r) => `
-        <div class="review">
-          <h4>${r.name}</h4>
-          <div class="rating">⭐ ${r.rating}/5</div>
-          <p>${r.message || ""}</p>
-        </div>
-      `
-      )
-      .join("");
-  } catch (err) {
-    reviewsContainer.innerHTML = "<p>Error loading reviews.</p>";
-  }
-}
+    <input type="text" placeholder="Address" />
 
-loadReviews();
-</script>
+    <input type="datetime-local">
 
+    <button class="primary-btn">Confirm Booking</button>
+    <button class="close-btn" data-close>Close</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
