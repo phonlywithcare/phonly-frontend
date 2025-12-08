@@ -1,3 +1,6 @@
+const backend = "https://backendwithapi.onrender.com";
+
+
 // ================= POPUP HANDLING ================= //
 const loginPopup = document.getElementById("loginPopup");
 const bookingPopup = document.getElementById("bookingPopup");
