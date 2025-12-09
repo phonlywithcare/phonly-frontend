@@ -111,3 +111,22 @@ reviewForm.addEventListener("submit", async function(e) {
     showToast("Server error");
   }
 });
+
+// ================= STAR RATING ================= //
+let selectedRating = 0; 
+const stars = document.querySelectorAll(".star-rating .star");
+
+stars.forEach(star => {
+  star.addEventListener("click", () => {
+    selectedRating = parseInt(star.dataset.value);
+
+    // Highlight stars
+    stars.forEach(s => {
+      s.classList.remove("active");
+      if (parseInt(s.dataset.value) <= selectedRating) {
+        s.classList.add("active");
+      }
+    });
+  });
+});
+
