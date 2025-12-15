@@ -112,38 +112,4 @@ reviewForm.addEventListener("submit", async function(e) {
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-
-  const loginPopup = document.getElementById("loginPopup");
-  const bookingPopup = document.getElementById("bookingPopup");
-
-  const openLogin = document.getElementById("openLogin");
-  const openBooking = document.getElementById("openBooking");
-
-  // Open Login
-  if (openLogin) openLogin.addEventListener("click", () => {
-    loginPopup.style.display = "flex";
-  });
-
-  // Open Booking
-  if (openBooking) openBooking.addEventListener("click", () => {
-    bookingPopup.style.display = "flex";
-  });
-
-  // Close buttons
-  document.querySelectorAll("[data-close]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      loginPopup.style.display = "none";
-      bookingPopup.style.display = "none";
-    });
-  });
-
-  // Close by clicking outside
-  window.addEventListener("click", (e) => {
-    if (e.target === loginPopup) loginPopup.style.display = "none";
-    if (e.target === bookingPopup) bookingPopup.style.display = "none";
-  });
-
-});
-
 
