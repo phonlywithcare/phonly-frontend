@@ -99,6 +99,24 @@ stars.forEach((star) => {
   });
 });
 
+// ================= STAR RATING FIX =================
+let selectedRating = 0;
+
+const stars = document.querySelectorAll("#starRating .star");
+
+stars.forEach((star, index) => {
+  star.addEventListener("click", () => {
+    selectedRating = index + 1;
+
+    stars.forEach((s, i) => {
+      s.classList.toggle("active", i < selectedRating);
+    });
+  });
+});
+
+
+
+
 // ================= REVIEW SUBMIT ================= //
 const reviewForm = document.getElementById("reviewForm");
 
