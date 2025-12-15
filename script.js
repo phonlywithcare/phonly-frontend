@@ -83,33 +83,64 @@ if (bookingBtn) {
 }
 
 
-// ================= REVIEW SUBMIT (CONNECTED TO BACKEND) ================= //
+// ================= STAR RATING ================= //
+let selectedRating = 5;
+
+const stars = document.querySelectorAll("#starRating .star");
+
+stars.forEach((star) => {
+  star.addEventListener("click", () => {
+    selectedRating = Number(star.dataset.value);
+
+    stars.forEach((s) => s.classList.remove("active"));
+    for (let i = 0; i < selectedRating; i++) {
+      stars[i].classList.add("active");
+    }
+  });
+});
+
+// ================= REVIEW SUBMIT ================= //
 const reviewForm = document.getElementById("reviewForm");
 
-reviewForm.addEventListener("submit", async function(e) {
+reviewForm.addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  const name = document.getElementById("rName").value;
-  const message = document.getElementById("rMessage").value;
+  const name = document.getElementById("rName").value.trim();
+  const message = document.getElementById("rMessage").value.trim();
+
+  if (!name || !message) {
+    showToast("Please fill all fields");
+    return;
+  }
 
   const data = {
     name,
     message,
-    rating: selectedRating || 5
+    rating: selectedRating,
   };
 
   try {
-    await fetch("https://backendwithapi.onrender.com/api/reviews", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
+    const res = await fetch(
+      "https://backendwithapi.onrender.com/api/reviews",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }
+    );
 
-    showToast("Review submitted!");
+    if (!res.ok) throw new Error("Failed");
+
+    showToast("Review submitted successfully ⭐");
+
     reviewForm.reset();
+    stars.forEach((s) => s.classList.remove("active"));
+    selectedRating = 5;
+
   } catch (err) {
     showToast("Server error");
   }
 });
+
 
 
