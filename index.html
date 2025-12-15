@@ -202,26 +202,23 @@
 </section>
 
 <!-- ================= GIVE REVIEW SECTION ================= -->
-<section class="give-review" id="give-review">
-  <h2>Give Your Review</h2>
-  <p class="section-sub">Rate your experience with Phonly</p>
+<form id="reviewForm">
+  <input type="text" id="rName" placeholder="Your Name" required />
 
-  <form id="reviewForm" class="review-form">
+  <textarea id="rMessage" placeholder="Your Review" required></textarea>
 
-    <!-- Star Rating -->
-    <div class="star-rating" id="starRating">
-      <i class="star" data-value="1">★</i>
-      <i class="star" data-value="2">★</i>
-      <i class="star" data-value="3">★</i>
-      <i class="star" data-value="4">★</i>
-      <i class="star" data-value="5">★</i>
-    </div>
+  <!-- ⭐ STAR RATING -->
+  <div class="star-rating" id="starRating">
+    <span data-value="1">★</span>
+    <span data-value="2">★</span>
+    <span data-value="3">★</span>
+    <span data-value="4">★</span>
+    <span data-value="5">★</span>
+  </div>
 
-    <input type="text" id="rName" placeholder="Your Name" required />
-    <textarea id="rMessage" placeholder="Your Review" required></textarea>
-    <button type="submit" class="primary-btn">Submit Review</button>
-  </form>
-</section>
+  <button type="submit" class="primary-btn">Submit Review</button>
+</form>
+
 
 <!-- ================= FOOTER ================= -->
 <footer class="footer" id="contact">
